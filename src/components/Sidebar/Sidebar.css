@@ -1,0 +1,233 @@
+/* Sidebar Styles */
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background: var(--sidebar-background);
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  overflow-y: auto;
+}
+
+.sidebar__header {
+  padding: 0 24px;
+  margin-bottom: 32px;
+}
+
+.sidebar__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Navigation */
+.sidebar__nav {
+  flex: 1;
+  padding: 0 16px;
+}
+
+.sidebar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar__item {
+  margin-bottom: 4px;
+}
+
+.sidebar__button {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+
+.sidebar__button:hover {
+  color: var(--text-primary);
+}
+
+.sidebar__button:hover svg {
+  opacity: 0.8;
+}
+
+.sidebar__button--active {
+  color: var(--text-primary);
+  font-weight: 600;
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar__button--active svg {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
+/* Dropdown specific styles */
+.sidebar__button--dropdown {
+  justify-content: space-between;
+}
+
+.sidebar__button--dropdown svg:last-child {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  transform: rotate(-90deg); /* Estado fechado: seta para direita */
+}
+
+.sidebar__button--open {
+  color: var(--text-primary);
+}
+
+.sidebar__button--open svg:last-child {
+  transform: rotate(0deg); /* Estado aberto: seta para baixo */
+}
+
+/* Sub-items */
+.sidebar__button--sub {
+  padding: 8px 16px 8px 32px;
+  font-size: 13px;
+}
+
+.sidebar__dropdown {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  background: transparent;
+  animation: slideDown 0.3s ease-out;
+  margin-left: 16px;
+  overflow: hidden;
+}
+
+.sidebar__dropdown-item {
+  margin: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 200px;
+  }
+}
+
+/* Events Section */
+.sidebar__section {
+  padding: 0 24px;
+  margin: 24px 0;
+}
+
+.sidebar__section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px 0;
+}
+
+.sidebar__events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar__event {
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.sidebar__event:hover {
+  color: var(--text-primary);
+}
+
+/* Footer */
+.sidebar__footer {
+  padding: 0 16px;
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.sidebar__theme-toggle {
+  margin-bottom: 16px;
+}
+
+/* User Section */
+.sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--sidebar-hover);
+  margin-top: 16px;
+}
+
+.sidebar__user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sidebar__user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sidebar__user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.sidebar__user-email {
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar--open {
+    transform: translateX(0);
+  }
+}

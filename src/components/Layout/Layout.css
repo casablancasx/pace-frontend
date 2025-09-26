@@ -1,0 +1,46 @@
+/* Layout Styles */
+.layout {
+  flex: 1;
+  margin-left: 285px; /* 5px de espaço da sidebar */
+  margin-top: 5px; /* Descolar do topo */
+  margin-right: 5px; /* Descolar da direita */
+  margin-bottom: 5px; /* Descolar do fundo */
+  background: var(--dashboard-background); /* Área cinza ocupa 100% */
+  min-height: calc(100vh - 10px); /* Ajusta pela margem top/bottom */
+  position: relative;
+  border: 1px solid var(--border-color);
+  border-radius: 16px; /* Border radius completo */
+}
+
+.layout__content {
+  padding: 32px 40px;
+  margin: 0 200px; /* Margem de 200px apenas nas laterais */
+  min-height: calc(100vh - 74px); /* Ajusta pela margem + padding + border */
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .layout {
+    margin-left: 5px; /* Descolar da esquerda também em tablet */
+    border-radius: 16px; /* Border radius completo em tablet */
+    border-left: 1px solid var(--border-color); /* Volta a borda esquerda */
+  }
+  
+  .layout__content {
+    margin: 0 100px; /* Margem reduzida em tablets */
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    margin-left: 5px; /* Descolar da esquerda também em mobile */
+    border-radius: 16px; /* Border radius completo em mobile */
+    border-left: 1px solid var(--border-color); /* Volta a borda esquerda */
+  }
+  
+  .layout__content {
+    margin: 0 20px; /* Margem mínima em mobile */
+    padding: 16px;
+  }
+}

@@ -1,0 +1,233 @@
+/* Dashboard Styles - Layout específico */yles */
+.dashboard {
+  flex: 1;
+  margin-left: 280px; /* Apenas encostado no sidebar */
+  background: var(--dashboard-background);
+  min-height: 100vh;
+  border: 1px solid var(--border-color);
+  border-left: none;
+  position: relative;
+}
+
+.dashboard__content {
+  margin: 200px;
+  padding: 32px 40px;
+}
+
+.dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.dashboard__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.dashboard__controls {
+  display: flex;
+  gap: 16px;
+}
+
+.dashboard__select {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-background);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.dashboard__select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Overview Section */
+.dashboard__overview {
+  margin-bottom: 48px;
+}
+
+.dashboard__section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 24px 0;
+}
+
+.dashboard__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Metric Cards */
+.metric-card {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--card-shadow);
+}
+
+.metric-card__header {
+  margin-bottom: 16px;
+}
+
+.metric-card__title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.metric-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-card__value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.metric-card__change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.metric-card__change--positive {
+  color: var(--success-color);
+}
+
+.metric-card__change--negative {
+  color: var(--error-color);
+}
+
+.metric-card__description {
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Orders Section */
+.dashboard__orders {
+  margin-bottom: 32px;
+}
+
+/* Orders Table */
+.orders-table {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.orders-table__header {
+  display: grid;
+  grid-template-columns: 120px 150px 1fr 1fr 120px;
+  background: var(--table-header-background);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 24px;
+}
+
+.orders-table__body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.orders-table__row {
+  display: grid;
+  grid-template-columns: 120px 150px 1fr 1fr 120px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.2s ease;
+}
+
+.orders-table__row:hover {
+  background: var(--table-row-hover);
+}
+
+.orders-table__row:last-child {
+  border-bottom: none;
+}
+
+.orders-table__cell {
+  padding: 16px 8px;
+  font-size: 14px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+}
+
+.orders-table__cell--header {
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 12px 8px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard__metrics {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  
+  .orders-table__header,
+  .orders-table__row {
+    grid-template-columns: 100px 130px 1fr 1fr 100px;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .dashboard__metrics {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .orders-table {
+    overflow-x: auto;
+  }
+  
+  .orders-table__header,
+  .orders-table__row {
+    grid-template-columns: 80px 120px 150px 180px 100px;
+    min-width: 630px;
+    padding: 0 12px;
+  }
+  
+  .orders-table__cell {
+    padding: 12px 4px;
+    font-size: 13px;
+  }
+}
