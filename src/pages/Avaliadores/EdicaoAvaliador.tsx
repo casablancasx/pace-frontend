@@ -1,43 +1,72 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Layout from '../../components/Layout';
+import type { AvaliadorData } from './avaliador';
 import './cadastroAvaliador.css';
 
-interface CadastroAvaliadorForm {
+interface EdicaoAvaliadorForm {
   nome: string;
   telefone: string;
   email: string;
-  setor: string;
-  unidade: string;
   sapiensId: string;
+  disponivel: boolean;
 }
 
-interface CadastroAvaliadorProps {
+interface EdicaoAvaliadorProps {
+  avaliador: AvaliadorData;
   onVoltar: () => void;
+  onSalvar: (avaliadorEditado: AvaliadorData) => void;
 }
 
-const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
-  const [form, setForm] = useState<CadastroAvaliadorForm>({
-    nome: '',
-    telefone: '',
-    email: '',
-    setor: '',
-    unidade: '',
-    sapiensId: ''
+const EdicaoAvaliador: React.FC<EdicaoAvaliadorProps> = ({ avaliador, onVoltar, onSalvar }) => {
+  const [form, setForm] = useState<EdicaoAvaliadorForm>({
+    nome: avaliador.nome,
+    telefone: avaliador.telefone,
+    email: avaliador.email,
+    sapiensId: avaliador.sapiensId.toString(),
+    disponivel: avaliador.disponivel
   });
 
+  const [showEmailPublic, setShowEmailPublic] = useState(false);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
     setForm(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui seria a lógica de cadastro
-    console.log('Formulário enviado:', form);
+    
+    const avaliadorEditado: AvaliadorData = {
+      ...avaliador,
+      nome: form.nome,
+      telefone: form.telefone,
+      email: form.email,
+      sapiensId: parseInt(form.sapiensId),
+      disponivel: form.disponivel
+    };
+
+    onSalvar(avaliadorEditado);
+    onVoltar();
+  };
+
+  const getStatusOptions = () => {
+    if (form.disponivel) {
+      return [
+        { value: true, label: 'Disponível' },
+        { value: false, label: 'Afastado' }
+      ];
+    } else {
+      return [
+        { value: false, label: 'Afastado' },
+        { value: true, label: 'Disponível' }
+      ];
+    }
   };
 
   return (
@@ -48,7 +77,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
             <ArrowLeft size={20} />
             Voltar
           </button>
-          <h1 className="cadastro-title">Cadastrar Avaliador</h1>
+          <h1 className="cadastro-title">Editar Avaliador</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="cadastro-form">
@@ -109,49 +138,30 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
                 required
               />
               
+              <div className="checkbox-group">
+                <input
+                  type="checkbox"
+                  id="showEmailPublic"
+                  checked={showEmailPublic}
+                  onChange={(e) => setShowEmailPublic(e.target.checked)}
+                  className="form-checkbox"
+                />
+                <label htmlFor="showEmailPublic" className="checkbox-label">
+                  Mostrar email no perfil público
+                </label>
+              </div>
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="setor">
-                Setor
+              <label className="form-label">
+                Setor / Unidade
               </label>
               <p className="form-description">
-                Setor de atuação do avaliador no tribunal.
+                Setor e unidade não podem ser alterados após o cadastro.
               </p>
-              <select
-                id="setor"
-                name="setor"
-                value={form.setor}
-                onChange={handleInputChange}
-                className="form-select"
-                required
-              >
-                <option value="">Selecione o setor</option>
-                <option value="Civil">Civil</option>
-                <option value="Criminal">Criminal</option>
-                <option value="Trabalhista">Trabalhista</option>
-                <option value="Família">Família</option>
-                <option value="Tributário">Tributário</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="unidade">
-                Unidade
-              </label>
-              <p className="form-description">
-                Vara ou unidade específica onde o avaliador atua.
-              </p>
-              <input
-                type="text"
-                id="unidade"
-                name="unidade"
-                value={form.unidade}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Ex: 1ª Vara Cível"
-                required
-              />
+              <div className="readonly-field">
+                <strong>{avaliador.setor}</strong> • {avaliador.unidade}
+              </div>
             </div>
 
             <div className="form-group">
@@ -172,6 +182,29 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
                 required
               />
             </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="disponivel">
+                Status de Disponibilidade
+              </label>
+              <p className="form-description">
+                Define se o avaliador está disponível para novos trabalhos ou afastado.
+              </p>
+              <select
+                id="disponivel"
+                name="disponivel"
+                value={form.disponivel.toString()}
+                onChange={(e) => setForm(prev => ({ ...prev, disponivel: e.target.value === 'true' }))}
+                className="form-select"
+                required
+              >
+                {getStatusOptions().map(option => (
+                  <option key={option.value.toString()} value={option.value.toString()}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="form-actions">
@@ -179,7 +212,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
               Cancelar
             </button>
             <button type="submit" className="submit-button">
-              Cadastrar Avaliador
+              Salvar Alterações
             </button>
           </div>
         </form>
@@ -188,4 +221,4 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
   );
 };
 
-export default CadastroAvaliador;
+export default EdicaoAvaliador;

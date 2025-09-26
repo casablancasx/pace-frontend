@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Search, MoreHorizontal } from 'lucide-react';
+import { Search, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
 import Layout from '../../components/Layout';
 import CadastroAvaliador from './CadastroAvaliador';
+import EdicaoAvaliador from './EdicaoAvaliador';
 import './avaliador.css';
 
-interface AvaliadorData {
+export interface AvaliadorData {
   avaliadorId: number;
   nome: string;
   telefone: string;
@@ -246,6 +247,10 @@ const Avaliador: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0); // Página baseada em 0 como no backend
   const [pageSize] = useState(5);
   const [showCadastro, setShowCadastro] = useState(false);
+  const [showEdicao, setShowEdicao] = useState(false);
+  const [avaliadorEditando, setAvaliadorEditando] = useState<AvaliadorData | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [avaliadores, setAvaliadores] = useState<AvaliadorData[]>(mockAvaliadores);
   const [pageResponse, setPageResponse] = useState<PageResponse<AvaliadorData>>({
     content: [],
     page: 0,
@@ -254,9 +259,33 @@ const Avaliador: React.FC = () => {
     totalPages: 0
   });
 
+  // Funções para gerenciar avaliadores
+  const handleEditarAvaliador = (avaliador: AvaliadorData) => {
+    setAvaliadorEditando(avaliador);
+    setShowEdicao(true);
+    setOpenMenuId(null);
+  };
+
+  const handleExcluirAvaliador = (avaliadorId: number) => {
+    if (window.confirm('Tem certeza que deseja excluir este avaliador?')) {
+      setAvaliadores(prev => prev.filter(a => a.avaliadorId !== avaliadorId));
+      setOpenMenuId(null);
+    }
+  };
+
+  const handleSalvarEdicao = (avaliadorEditado: AvaliadorData) => {
+    setAvaliadores(prev => 
+      prev.map(a => a.avaliadorId === avaliadorEditado.avaliadorId ? avaliadorEditado : a)
+    );
+  };
+
+  const handleToggleMenu = (avaliadorId: number) => {
+    setOpenMenuId(openMenuId === avaliadorId ? null : avaliadorId);
+  };
+
   // Simulação de dados com estrutura PageResponse
   React.useEffect(() => {
-    const filteredAvaliadores = mockAvaliadores.filter(avaliador =>
+    const filteredAvaliadores = avaliadores.filter(avaliador =>
       avaliador.nome.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -287,10 +316,23 @@ const Avaliador: React.FC = () => {
       totalElements,
       totalPages
     });
-  }, [searchTerm, sortBy, currentPage, pageSize]);
+  }, [searchTerm, sortBy, currentPage, pageSize, avaliadores]);
 
   if (showCadastro) {
     return <CadastroAvaliador onVoltar={() => setShowCadastro(false)} />;
+  }
+
+  if (showEdicao && avaliadorEditando) {
+    return (
+      <EdicaoAvaliador 
+        avaliador={avaliadorEditando}
+        onVoltar={() => {
+          setShowEdicao(false);
+          setAvaliadorEditando(null);
+        }}
+        onSalvar={handleSalvarEdicao}
+      />
+    );
   }
 
   return (
@@ -356,11 +398,35 @@ const Avaliador: React.FC = () => {
               
               <div className="avaliador-status">
                 <span className={`status-badge ${avaliador.disponivel ? 'disponivel' : 'indisponivel'}`}>
-                  {avaliador.disponivel ? 'Disponível' : 'Ocupado'}
+                  {avaliador.disponivel ? 'Disponível' : 'Afastado'}
                 </span>
-                <button className="actions-button">
-                  <MoreHorizontal size={20} />
-                </button>
+                <div className="actions-dropdown">
+                  <button 
+                    className="actions-button"
+                    onClick={() => handleToggleMenu(avaliador.avaliadorId)}
+                  >
+                    <MoreHorizontal size={20} />
+                  </button>
+                  
+                  {openMenuId === avaliador.avaliadorId && (
+                    <div className="dropdown-menu">
+                      <button 
+                        className="dropdown-item"
+                        onClick={() => handleEditarAvaliador(avaliador)}
+                      >
+                        <Edit size={16} />
+                        Editar
+                      </button>
+                      <button 
+                        className="dropdown-item delete"
+                        onClick={() => handleExcluirAvaliador(avaliador.avaliadorId)}
+                      >
+                        <Trash2 size={16} />
+                        Excluir
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
