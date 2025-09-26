@@ -300,6 +300,52 @@
   background: rgba(239, 68, 68, 0.1);
 }
 
+/* Actions Container */
+.actions-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.action-button:hover {
+  background: var(--hover-color);
+  color: var(--text-primary);
+}
+
+.action-button.edit:hover {
+  color: var(--primary-color);
+}
+
+.action-button.delete:hover {
+  color: var(--error-color);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Card hover effect */
+.avaliador-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.avaliador-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -355,6 +401,49 @@
   border-radius: 8px;
   color: var(--text-secondary);
   font-size: 14px;
+}
+
+/* Action buttons */
+.actions-container {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.avaliador-card:hover .actions-container {
+  opacity: 1;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.action-button.edit {
+  color: var(--text-secondary);
+}
+
+.action-button.edit:hover {
+  background: var(--hover-color);
+  color: var(--text-primary);
+}
+
+.action-button.delete {
+  color: var(--error-color);
+}
+
+.action-button.delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--error-color);
 }
 
 /* Responsive design */

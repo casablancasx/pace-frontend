@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Search, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
+import { Search, Edit, Trash2 } from 'lucide-react';
 import Layout from '../../components/Layout';
 import CadastroAvaliador from './CadastroAvaliador';
 import EdicaoAvaliador from './EdicaoAvaliador';
+import DetalhesAvaliador from './DetalhesAvaliador';
 import './avaliador.css';
 
 export interface AvaliadorData {
@@ -248,8 +249,9 @@ const Avaliador: React.FC = () => {
   const [pageSize] = useState(5);
   const [showCadastro, setShowCadastro] = useState(false);
   const [showEdicao, setShowEdicao] = useState(false);
+  const [showDetalhes, setShowDetalhes] = useState(false);
   const [avaliadorEditando, setAvaliadorEditando] = useState<AvaliadorData | null>(null);
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [avaliadorSelecionado, setAvaliadorSelecionado] = useState<AvaliadorData | null>(null);
   const [avaliadores, setAvaliadores] = useState<AvaliadorData[]>(mockAvaliadores);
   const [pageResponse, setPageResponse] = useState<PageResponse<AvaliadorData>>({
     content: [],
@@ -263,24 +265,28 @@ const Avaliador: React.FC = () => {
   const handleEditarAvaliador = (avaliador: AvaliadorData) => {
     setAvaliadorEditando(avaliador);
     setShowEdicao(true);
-    setOpenMenuId(null);
   };
 
   const handleExcluirAvaliador = (avaliadorId: number) => {
     if (window.confirm('Tem certeza que deseja excluir este avaliador?')) {
       setAvaliadores(prev => prev.filter(a => a.avaliadorId !== avaliadorId));
-      setOpenMenuId(null);
     }
+  };
+
+  const handleVerDetalhes = (avaliador: AvaliadorData) => {
+    setAvaliadorSelecionado(avaliador);
+    setShowDetalhes(true);
+  };
+
+  const handleVoltarDetalhes = () => {
+    setShowDetalhes(false);
+    setAvaliadorSelecionado(null);
   };
 
   const handleSalvarEdicao = (avaliadorEditado: AvaliadorData) => {
     setAvaliadores(prev => 
       prev.map(a => a.avaliadorId === avaliadorEditado.avaliadorId ? avaliadorEditado : a)
     );
-  };
-
-  const handleToggleMenu = (avaliadorId: number) => {
-    setOpenMenuId(openMenuId === avaliadorId ? null : avaliadorId);
   };
 
   // Simulação de dados com estrutura PageResponse
@@ -335,6 +341,15 @@ const Avaliador: React.FC = () => {
     );
   }
 
+  if (showDetalhes && avaliadorSelecionado) {
+    return (
+      <DetalhesAvaliador
+        avaliador={avaliadorSelecionado}
+        onVoltar={handleVoltarDetalhes}
+      />
+    );
+  }
+
   return (
     <Layout>
       <div className="avaliador-page">
@@ -373,7 +388,7 @@ const Avaliador: React.FC = () => {
 
         <div className="avaliadores-list">
           {pageResponse.content.map((avaliador: AvaliadorData) => (
-            <div key={avaliador.avaliadorId} className="avaliador-card">
+            <div key={avaliador.avaliadorId} className="avaliador-card" onClick={() => handleVerDetalhes(avaliador)}>
               <div className="avaliador-avatar">
                 <div className="avatar-placeholder">
                   {avaliador.nome.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()}
@@ -400,32 +415,27 @@ const Avaliador: React.FC = () => {
                 <span className={`status-badge ${avaliador.disponivel ? 'disponivel' : 'indisponivel'}`}>
                   {avaliador.disponivel ? 'Disponível' : 'Afastado'}
                 </span>
-                <div className="actions-dropdown">
+                <div className="actions-container">
                   <button 
-                    className="actions-button"
-                    onClick={() => handleToggleMenu(avaliador.avaliadorId)}
+                    className="action-button edit"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditarAvaliador(avaliador);
+                    }}
+                    title="Editar avaliador"
                   >
-                    <MoreHorizontal size={20} />
+                    <Edit size={16} />
                   </button>
-                  
-                  {openMenuId === avaliador.avaliadorId && (
-                    <div className="dropdown-menu">
-                      <button 
-                        className="dropdown-item"
-                        onClick={() => handleEditarAvaliador(avaliador)}
-                      >
-                        <Edit size={16} />
-                        Editar
-                      </button>
-                      <button 
-                        className="dropdown-item delete"
-                        onClick={() => handleExcluirAvaliador(avaliador.avaliadorId)}
-                      >
-                        <Trash2 size={16} />
-                        Excluir
-                      </button>
-                    </div>
-                  )}
+                  <button 
+                    className="action-button delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleExcluirAvaliador(avaliador.avaliadorId);
+                    }}
+                    title="Excluir avaliador"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               </div>
             </div>
