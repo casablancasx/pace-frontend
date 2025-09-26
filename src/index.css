@@ -30,11 +30,16 @@
   --table-header-background: #f9fafb;
   --table-row-hover: #f9fafb;
   --sidebar-hover: #f3f4f6;
+  --background-secondary: #ffffff;
+  --hover-color: #f3f4f6;
   
   /* Borders */
   --border-color: #e5e7eb;
   --border-light: #f3f4f6;
   --border-hover: #d1d5db;
+  
+  /* Button Colors */
+  --button-background: #3b82f6;
   
   /* Shadows */
   --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -55,18 +60,23 @@
   --text-tertiary: #9ca3af;
   
   /* Backgrounds */
-  --background: #111827;
-  --sidebar-background: #1f2937;
-  --dashboard-background: #111827;
+  --background: #18181B;
+  --sidebar-background: #000000;
+  --dashboard-background: #18181B;
   --card-background: #1f2937;
   --table-header-background: #374151;
   --table-row-hover: #374151;
-  --sidebar-hover: #374151;
+  --sidebar-hover: #1a1a1a;
+  --background-secondary: #1f2937;
+  --hover-color: #374151;
   
   /* Borders */
-  --border-color: #374151;
-  --border-light: #4b5563;
-  --border-hover: #4b5563;
+  --border-color: #2F2F32;
+  --border-light: #2F2F32;
+  --border-hover: #2F2F32;
+  
+  /* Button Colors */
+  --button-background: #52525C;
   
   /* Shadows */
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);

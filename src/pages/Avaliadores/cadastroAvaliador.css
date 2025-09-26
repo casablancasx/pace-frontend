@@ -162,7 +162,7 @@
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background: var(--primary-color);
+  background: var(--button-background, var(--primary-color));
   color: white;
   font-size: 14px;
   font-weight: 500;
