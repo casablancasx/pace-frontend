@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, MoreHorizontal } from 'lucide-react';
 import Layout from '../../components/Layout';
+import CadastroAvaliador from './CadastroAvaliador';
 import './avaliador.css';
 
 interface AvaliadorData {
@@ -244,6 +245,7 @@ const Avaliador: React.FC = () => {
   const [sortBy, setSortBy] = useState('nome');
   const [currentPage, setCurrentPage] = useState(0); // Página baseada em 0 como no backend
   const [pageSize] = useState(5);
+  const [showCadastro, setShowCadastro] = useState(false);
   const [pageResponse, setPageResponse] = useState<PageResponse<AvaliadorData>>({
     content: [],
     page: 0,
@@ -287,6 +289,10 @@ const Avaliador: React.FC = () => {
     });
   }, [searchTerm, sortBy, currentPage, pageSize]);
 
+  if (showCadastro) {
+    return <CadastroAvaliador onVoltar={() => setShowCadastro(false)} />;
+  }
+
   return (
     <Layout>
       <div className="avaliador-page">
@@ -315,7 +321,10 @@ const Avaliador: React.FC = () => {
             <option value="pautas">Ordenar por pautas</option>
           </select>
           
-          <button className="create-button">
+          <button 
+            className="create-button"
+            onClick={() => setShowCadastro(true)}
+          >
             Cadastrar Avaliador
           </button>
         </div>
