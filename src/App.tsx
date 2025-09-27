@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Avaliador from './pages/Avaliadores/avaliador';
+import Pautista from './pages/Pautistas/pautista';
 import './App.css';
 
 const AppContent: React.FC = () => {
@@ -34,12 +35,7 @@ const AppContent: React.FC = () => {
           </Layout>
         );
       case 'pautistas':
-        return (
-          <Layout>
-            <h1>Pautistas</h1>
-            <p>Página de pautistas será desenvolvida aqui.</p>
-          </Layout>
-        );
+        return <Pautista />;
       case 'avaliadores':
         return <Avaliador />;
       case 'pautista':
