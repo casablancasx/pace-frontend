@@ -64,6 +64,11 @@
   transition: all 0.2s ease;
 }
 
+.form-input[type="date"] {
+  background: var(--input-background);
+  color: var(--text-primary);
+}
+
 .form-input:focus,
 .form-select:focus {
   outline: none;
