@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Users, MapPin } from 'lucide-react';
 import Layout from '../../components/Layout';
 import TagInput from '../../components/TagInput';
+import AudienciasPendentes from '../../components/AudienciasPendentes';
 import './EscalaAvaliadores.css';
 
 interface EscalaAvaliadorForm {
@@ -296,6 +297,9 @@ const EscalaAvaliadores: React.FC = () => {
               </button>
             </div>
           </form>
+
+          {/* Seção de Audiências Pendentes */}
+          <AudienciasPendentes />
       </div>
     </Layout>
   );
