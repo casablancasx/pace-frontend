@@ -4,6 +4,7 @@ export { default as Sidebar } from './Sidebar';
 export { default as Dashboard } from './Dashboard';
 export { default as Events } from './Events';
 export { default as Orders } from './Orders';
+export { default as ImportarPlanilha } from './ImportarPlanilha';
 
 // Context exports
 export { ThemeProvider, useTheme } from '../contexts/ThemeContext';

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-type PageType = 'home' | 'advogados' | 'pautas' | 'audiencias' | 'pautistas' | 'avaliadores' | 'pautista' | 'avaliador';
+type PageType = 'home' | 'advogados' | 'pautas' | 'audiencias' | 'pautistas' | 'avaliadores' | 'pautista' | 'avaliador' | 'importar-planilha';
 
 interface NavigationContextData {
   currentPage: PageType;

@@ -6,6 +6,7 @@ import {
   Calendar, 
   UserCheck, 
   UserCog,
+  Upload,
   ChevronDown,
   ChevronUp,
   HelpCircle, 
@@ -26,6 +27,7 @@ const sidebarItems: SidebarItem[] = [
   { id: 'audiencias', label: 'Audiências', icon: Calendar },
   { id: 'pautistas', label: 'Pautistas', icon: UserCheck },
   { id: 'avaliadores', label: 'Avaliadores', icon: UserCog },
+  { id: 'importar-planilha', label: 'Importar Planilha', icon: Upload },
 ];
 
 const escalarItems = [

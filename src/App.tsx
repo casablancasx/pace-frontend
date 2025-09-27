@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Avaliador from './pages/Avaliadores/avaliador';
 import Pautista from './pages/Pautistas/pautista';
+import ImportarPlanilha from './components/ImportarPlanilha';
 import './App.css';
 
 const AppContent: React.FC = () => {
@@ -38,6 +39,8 @@ const AppContent: React.FC = () => {
         return <Pautista />;
       case 'avaliadores':
         return <Avaliador />;
+      case 'importar-planilha':
+        return <ImportarPlanilha />;
       case 'pautista':
         return (
           <Layout>
