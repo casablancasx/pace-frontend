@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Avaliador from './pages/Avaliadores/avaliador';
 import Pautista from './pages/Pautistas/pautista';
+import EscalaAvaliadores from './pages/EscalaAvaliadores';
 import ImportarPlanilha from './components/ImportarPlanilha';
 import './App.css';
 
@@ -55,6 +56,8 @@ const AppContent: React.FC = () => {
             <p>Página para escalar avaliador será desenvolvida aqui.</p>
           </Layout>
         );
+      case 'escala-avaliadores':
+        return <EscalaAvaliadores />;
       default:
         return <Dashboard />;
     }
