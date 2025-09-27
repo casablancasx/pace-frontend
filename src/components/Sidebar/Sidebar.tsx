@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Home, 
   Users, 
@@ -7,10 +7,12 @@ import {
   UserCheck, 
   UserCog,
   ChevronDown,
+  ChevronUp,
   HelpCircle, 
   User, 
   Sun, 
-  Moon 
+  Moon,
+  LogOut
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useNavigation } from '../../contexts/NavigationContext';
@@ -35,6 +37,8 @@ const Sidebar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { currentPage, setCurrentPage } = useNavigation();
   const [isEscalarOpen, setIsEscalarOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   const handlePageClick = (pageId: string) => {
     setCurrentPage(pageId as any);
@@ -43,6 +47,34 @@ const Sidebar: React.FC = () => {
   const toggleEscalar = () => {
     setIsEscalarOpen(!isEscalarOpen);
   };
+
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
+  const handleLogout = () => {
+    // Aqui você pode adicionar a lógica de logout
+    console.log('Logout realizado');
+    // Por exemplo: limpar tokens, redirecionar, etc.
+    setIsUserMenuOpen(false);
+  };
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
 
   return (
     <aside className="sidebar">
@@ -137,14 +169,32 @@ const Sidebar: React.FC = () => {
           <span>{theme === 'light' ? 'Dark' : 'Light'} Mode</span>
         </button>
 
-        <div className="sidebar__user">
-          <div className="sidebar__user-avatar">
-            <User size={20} />
-          </div>
-          <div className="sidebar__user-info">
-            <span className="sidebar__user-name">Erica</span>
-            <span className="sidebar__user-email">erica@example.com</span>
-          </div>
+        <div className="sidebar__user-section" ref={userMenuRef}>
+          <button 
+            className={`sidebar__user ${isUserMenuOpen ? 'sidebar__user--open' : ''}`}
+            onClick={toggleUserMenu}
+          >
+            <div className="sidebar__user-avatar">
+              <User size={20} />
+            </div>
+            <div className="sidebar__user-info">
+              <span className="sidebar__user-name">Erica</span>
+              <span className="sidebar__user-email">erica@example.com</span>
+            </div>
+            {isUserMenuOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          
+          {isUserMenuOpen && (
+            <div className="sidebar__user-menu">
+              <button 
+                className="sidebar__user-menu-item sidebar__user-menu-item--logout"
+                onClick={handleLogout}
+              >
+                <LogOut size={16} />
+                <span>Sign out</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </aside>
