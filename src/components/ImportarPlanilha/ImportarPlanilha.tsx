@@ -1,4 +1,5 @@
-import React, { useState, useRef, DragEvent } from 'react';
+import React, { useState, useRef } from 'react';
+import type { DragEvent } from 'react';
 import { Upload, File, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import Layout from '../Layout';
 import './ImportarPlanilha.css';

@@ -71,9 +71,9 @@
 
 /* Metric Cards */
 .metric-card {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+  background: transparent;
+  border-top: 1px solid var(--border-color);
+
   padding: 24px;
   transition: all 0.2s ease;
 }
