@@ -8,10 +8,12 @@ import Avaliador from './pages/Avaliadores/avaliador';
 import Pautista from './pages/Pautistas/pautista';
 import EscalaAvaliadores from './pages/EscalaAvaliadores';
 import ImportarPlanilha from './components/ImportarPlanilha';
+import Pautas from './pages/Pautas';
+import DetalhesPauta from './pages/Pautas/DetalhesPauta';
 import './App.css';
 
 const AppContent: React.FC = () => {
-  const { currentPage } = useNavigation();
+  const { currentPage, selectedPautaId } = useNavigation();
 
   const renderPage = () => {
     switch (currentPage) {
@@ -23,12 +25,9 @@ const AppContent: React.FC = () => {
           </Layout>
         );
       case 'pautas':
-        return (
-          <Layout>
-            <h1>Pautas</h1>
-            <p>Página de pautas será desenvolvida aqui.</p>
-          </Layout>
-        );
+        return <Pautas />;
+      case 'detalhes-pauta':
+        return <DetalhesPauta pautaId={selectedPautaId || ''} />;
       case 'audiencias':
         return (
           <Layout>

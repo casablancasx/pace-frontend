@@ -38,6 +38,10 @@
   --border-light: #f3f4f6;
   --border-hover: #d1d5db;
   
+  /* RGB Values for transparency */
+  --border-color-rgb: 229, 231, 235;
+  --hover-color-rgb: 243, 244, 246;
+  
   /* Button Colors */
   --button-background: #3b82f6;
   
@@ -77,6 +81,10 @@
   --border-color: #2F2F32;
   --border-light: #2F2F32;
   --border-hover: #2F2F32;
+  
+  /* RGB Values for transparency */
+  --border-color-rgb: 47, 47, 50;
+  --hover-color-rgb: 55, 65, 81;
   
   /* Button Colors */
   --button-background: #52525C;
