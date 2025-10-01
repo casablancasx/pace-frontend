@@ -9,7 +9,6 @@ import {
   Upload,
   ChevronDown,
   ChevronUp,
-  HelpCircle, 
   User, 
   Sun, 
   Moon,
@@ -179,11 +178,6 @@ const Sidebar: React.FC = () => {
       </nav>
 
       <div className="sidebar__footer">
-        <button className="sidebar__button">
-          <HelpCircle size={20} />
-          <span>Support</span>
-        </button>
-
         <button 
           className="sidebar__button sidebar__theme-toggle"
           onClick={toggleTheme}

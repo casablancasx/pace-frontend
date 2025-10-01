@@ -36,7 +36,7 @@ const roleRoutes: Record<UserRole, string[]> = {
     'importar-planilha',
     'escala-avaliadores',
     'escala-pautistas',
-    'minhas-pautas',
+    // ADMIN não precisa de 'minhas-pautas' pois tem acesso a 'pautas' completo
   ],
   USER: ['home', 'minhas-pautas'],
   AVALIADOR: ['home', 'audiencias', 'minhas-pautas'],
