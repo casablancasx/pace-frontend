@@ -1,6 +1,8 @@
 import api from './api';
 import type { LoginRequestDTO, LoginResponseDTO } from '../types/auth';
 
+export const AUTH_CHANGE_EVENT = 'authChange';
+
 // Classe para gerenciar autenticação
 class AuthService {
   // Endpoint para login
@@ -18,6 +20,8 @@ class AuthService {
       // Armazenar o token e dados do usuário no localStorage
       localStorage.setItem('auth_token', response.data.token);
       localStorage.setItem('user_data', JSON.stringify(response.data.user));
+
+  window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
       
       return response.data;
     } catch (error) {
@@ -32,6 +36,7 @@ class AuthService {
   static logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
     // Redireciona para a página de login
     window.location.href = '/login';
   }

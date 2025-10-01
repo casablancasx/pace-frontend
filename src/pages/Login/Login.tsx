@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import pgfLogo from '../../assets/pgf.svg';
 import AuthService from '../../services/authService';
+import { useAuthorization } from '../../contexts/AuthorizationContext';
 import type { LoginRequestDTO } from '../../types/auth';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { refreshUser } = useAuthorization();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,6 +41,7 @@ const Login: React.FC = () => {
       
       const credentials: LoginRequestDTO = { email, password };
       const response = await AuthService.login(credentials);
+  refreshUser();
       
       // Se lembrar estiver marcado, salvar preferência
       if (rememberMe) {

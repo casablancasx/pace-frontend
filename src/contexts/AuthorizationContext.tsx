@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import AuthService from '../services/authService';
+import AuthService, { AUTH_CHANGE_EVENT } from '../services/authService';
 import type { UsuarioEntity, UserRole } from '../types/auth';
 
 // Interface para o contexto de autorização
@@ -11,6 +11,7 @@ interface AuthorizationContextType {
   allowedRoutes: string[];
   userData: UsuarioEntity | null;
   isLoading: boolean;
+  refreshUser: () => void;
 }
 
 // Criar o contexto
@@ -58,6 +59,13 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
   const [userData, setUserData] = useState<UsuarioEntity | null>(initialUser);
   const [isLoading, setIsLoading] = useState(true);
   
+  const refreshUser = useCallback(() => {
+    const user = AuthService.getCurrentUser();
+    setUserData(user);
+    setUserRole(user?.role || null);
+    setIsLoading(false);
+  }, []);
+  
   // Verifica se o usuário é um administrador
   const isAdmin = userRole === 'ADMIN';
   
@@ -69,16 +77,20 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
   
   // Monitora mudanças nos dados do usuário (para atualizações futuras)
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setUserData(user);
-      setUserRole(user.role);
-    } else {
-      setUserData(null);
-      setUserRole(null);
-    }
-    setIsLoading(false);
-  }, []);
+    refreshUser();
+
+    const handleAuthChange = () => {
+      refreshUser();
+    };
+
+    window.addEventListener(AUTH_CHANGE_EVENT, handleAuthChange);
+    window.addEventListener('storage', handleAuthChange);
+
+    return () => {
+      window.removeEventListener(AUTH_CHANGE_EVENT, handleAuthChange);
+      window.removeEventListener('storage', handleAuthChange);
+    };
+  }, [refreshUser]);
   
   // Função para verificar se o usuário tem uma permissão específica
   const hasPermission = (permission: string) => {
@@ -93,7 +105,8 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
     hasPermission,
     allowedRoutes,
     userData,
-    isLoading
+    isLoading,
+    refreshUser
   };
   
   return (
