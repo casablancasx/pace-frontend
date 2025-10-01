@@ -38,7 +38,7 @@ const Login: React.FC = () => {
       setIsLoading(true);
       
       const credentials: LoginRequestDTO = { email, password };
-      await AuthService.login(credentials);
+      const response = await AuthService.login(credentials);
       
       // Se lembrar estiver marcado, salvar preferência
       if (rememberMe) {
@@ -47,8 +47,29 @@ const Login: React.FC = () => {
         localStorage.removeItem('remember_email');
       }
       
-      // Redirecionar para a página principal após login bem-sucedido
-      navigate('/');
+      // Redirecionar com base no papel do usuário
+      const role = response.user.role;
+      
+      // Direcionar para diferentes rotas dependendo do papel do usuário
+      switch (role) {
+        case 'ADMIN':
+          navigate('/home');
+          break;
+        case 'USER':
+          navigate('/minhas-pautas');
+          break;
+        case 'AVALIADOR':
+          navigate('/minhas-pautas');
+          break;
+        case 'PAUTISTA':
+          navigate('/minhas-pautas');
+          break;
+        case 'COORDENADOR':
+          navigate('/pautas');
+          break;
+        default:
+          navigate('/home');
+      }
       
     } catch (error: any) {
       console.error('Erro no login:', error);

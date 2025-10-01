@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
+import { AuthorizationProvider } from './contexts/AuthorizationContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
@@ -11,6 +13,7 @@ import EscalaAvaliadores from './pages/EscalaAvaliadores';
 import ImportarPlanilha from './components/ImportarPlanilha';
 import Pautas from './pages/Pautas';
 import DetalhesPauta from './pages/Pautas/DetalhesPauta';
+import MinhasPautas from './pages/MinhasPautas';
 import Login from './pages/Login/Login';
 import './App.css';
 
@@ -59,6 +62,8 @@ const AppContent: React.FC = () => {
         );
       case 'escala-avaliadores':
         return <EscalaAvaliadores />;
+      case 'minhas-pautas':
+        return <MinhasPautas />;
       default:
         return <Dashboard />;
     }
@@ -75,14 +80,18 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/*" element={
-          <NavigationProvider>
-            <AppContent />
-          </NavigationProvider>
-        } />
-      </Routes>
+      <AuthorizationProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/*" element={
+            <ProtectedRoute>
+              <NavigationProvider>
+                <AppContent />
+              </NavigationProvider>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </AuthorizationProvider>
     </ThemeProvider>
   );
 };

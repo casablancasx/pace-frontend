@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Home, 
   Users, 
@@ -13,27 +13,31 @@ import {
   User, 
   Sun, 
   Moon,
-  LogOut
+  LogOut,
+  Folder
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useNavigation } from '../../contexts/NavigationContext';
+import { useAuthorization } from '../../contexts/AuthorizationContext';
 import AuthService from '../../services/authService';
 import type { SidebarItem } from '../../types';
-import type { UsuarioEntity } from '../../types/auth';
 import './Sidebar.css';
 
-const sidebarItems: SidebarItem[] = [
+// Definição de todos os itens do sidebar
+const allSidebarItems: SidebarItem[] = [
   { id: 'home', label: 'Home', icon: Home },
   { id: 'advogados', label: 'Advogados', icon: Users },
   { id: 'pautas', label: 'Pautas', icon: FileText },
+  { id: 'minhas-pautas', label: 'Minhas Pautas', icon: Folder },
   { id: 'audiencias', label: 'Audiências', icon: Calendar },
   { id: 'pautistas', label: 'Pautistas', icon: UserCheck },
   { id: 'avaliadores', label: 'Avaliadores', icon: UserCog },
   { id: 'importar-planilha', label: 'Importar Planilha', icon: Upload },
 ];
 
-const escalarItems = [
+// Definição de todos os itens de escalar
+const allEscalarItems: SidebarItem[] = [
   { id: 'escala-avaliadores', label: 'Escala Avaliadores', icon: UserCog },
   { id: 'escala-pautistas', label: 'Escala Pautistas', icon: UserCheck },
 ];
@@ -42,21 +46,27 @@ const Sidebar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { currentPage, setCurrentPage } = useNavigation();
   const navigate = useNavigate();
+  const { allowedRoutes, userData } = useAuthorization();
   const [isEscalarOpen, setIsEscalarOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const [userData, setUserData] = useState<UsuarioEntity | null>(null);
-
-  // Carregar dados do usuário do localStorage quando o componente for montado
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setUserData(user);
-    }
-  }, []);
+  
+  // Filtrar os itens do sidebar com base nas permissões do usuário
+  const sidebarItems = allSidebarItems.filter(item => 
+    allowedRoutes.includes(item.id)
+  );
+  
+  // Filtrar os itens de escalar com base nas permissões do usuário
+  const escalarItems = allEscalarItems.filter(item => 
+    allowedRoutes.includes(item.id)
+  );
+  
+  // Verificar se há itens de escalar disponíveis para o usuário
+  const hasEscalarItems = escalarItems.length > 0;
 
   const handlePageClick = (pageId: string) => {
-    setCurrentPage(pageId as any);
+    setCurrentPage(pageId as any); // Utilizamos 'as any' para evitar problemas de tipagem
+    navigate(`/${pageId}`);
   };
 
   const toggleEscalar = () => {
@@ -68,9 +78,7 @@ const Sidebar: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Usar o método de logout do AuthService
     AuthService.logout();
-    // Redirecionar para a página de login
     navigate('/login');
     setIsUserMenuOpen(false);
   };
@@ -100,8 +108,8 @@ const Sidebar: React.FC = () => {
 
       <nav className="sidebar__nav">
         <ul className="sidebar__list">
-          {/* Item Home */}
-          {sidebarItems.slice(0, 1).map((item) => {
+          {/* Item Home - sempre mostrado primeiro */}
+          {sidebarItems.filter(item => item.id === 'home').map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (
@@ -117,39 +125,42 @@ const Sidebar: React.FC = () => {
             );
           })}
           
-          {/* Dropdown Escalar */}
-          <li className="sidebar__item">
-            <button 
-              className={`sidebar__button sidebar__button--dropdown ${isEscalarOpen ? 'sidebar__button--open' : ''}`}
-              onClick={toggleEscalar}
-            >
-              <Users size={20} />
-              <span>Escalar</span>
-              <ChevronDown size={16} />
-            </button>
-            {isEscalarOpen && (
-              <ul className="sidebar__dropdown">
-                {escalarItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = currentPage === item.id;
-                  return (
-                    <li key={item.id} className="sidebar__dropdown-item">
-                      <button 
-                        className={`sidebar__button sidebar__button--sub ${isActive ? 'sidebar__button--active' : ''}`}
-                        onClick={() => handlePageClick(item.id)}
-                      >
-                        <Icon size={18} />
-                        <span>{item.label}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </li>
-          
-          {/* Outros itens */}
-          {sidebarItems.slice(1).map((item) => {
+          {/* Dropdown Escalar - apenas se o usuário tiver permissão */}
+          {hasEscalarItems && (
+            <li className="sidebar__item">
+              <button 
+                className={`sidebar__button sidebar__button--dropdown ${isEscalarOpen ? 'sidebar__button--open' : ''}`}
+                onClick={toggleEscalar}
+              >
+                <Users size={20} />
+                <span>Escalar</span>
+                {isEscalarOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </button>
+              
+              {isEscalarOpen && (
+                <ul className="sidebar__dropdown">
+                  {escalarItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = currentPage === item.id;
+                    return (
+                      <li key={item.id} className="sidebar__dropdown-item">
+                        <button 
+                          className={`sidebar__button sidebar__button--sub ${isActive ? 'sidebar__button--active' : ''}`}
+                          onClick={() => handlePageClick(item.id)}
+                        >
+                          <Icon size={18} />
+                          <span>{item.label}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          )}
+
+          {/* Outros itens do sidebar exceto home */}
+          {sidebarItems.filter(item => item.id !== 'home').map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (
@@ -167,15 +178,11 @@ const Sidebar: React.FC = () => {
         </ul>
       </nav>
 
-     
-
       <div className="sidebar__footer">
         <button className="sidebar__button">
           <HelpCircle size={20} />
           <span>Support</span>
         </button>
-        
-        
 
         <button 
           className="sidebar__button sidebar__theme-toggle"
