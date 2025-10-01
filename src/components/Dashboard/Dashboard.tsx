@@ -5,6 +5,7 @@ import MapaBrasil from '../MapaBrasil';
 import AudienceSubjectBarChart from './AudienceSubjectBarChart';
 import type { AudienceSubjectMetric } from './AudienceSubjectBarChart';
 import type { DashboardData, DashboardStateMetric, MetricCard } from '../../types';
+import { useAuthorization } from '../../contexts/AuthorizationContext';
 import './Dashboard.css';
 
 interface DashboardProps {
@@ -216,10 +217,25 @@ const MetricCardComponent: React.FC<{ metric: MetricCard }> = ({ metric }) => {
 };
 
 const Dashboard: React.FC<DashboardProps> = ({ data = mockData }) => {
+  const { userData } = useAuthorization();
+
+  const hour = new Date().getHours();
+  const greeting = hour >= 5 && hour < 12
+    ? 'Bom dia'
+    : hour >= 12 && hour < 18
+      ? 'Boa tarde'
+      : 'Boa noite';
+
+  const rawName = userData?.nome?.trim() ?? '';
+  const displayName = rawName ? rawName.split(' ')[0] : 'Usuário';
+  const formattedName = displayName
+    ? displayName.charAt(0).toUpperCase() + displayName.slice(1).toLocaleLowerCase('pt-BR')
+    : 'Usuário';
+
   return (
     <Layout>
       <header className="dashboard__header">
-        <h1 className="dashboard__title">Good afternoon, Erica</h1>
+        <h1 className="dashboard__title">{`${greeting}, ${formattedName}`}</h1>
         <div className="dashboard__controls">
           <select className="dashboard__select">
             <option value="last-week">Last week</option>
