@@ -10,7 +10,7 @@
   gap: 8px;
   padding: 8px 16px;
   background: transparent;
-  border: 1px solid var(--border-color);
+  border: none;
   border-radius: 8px;
   color: var(--text-secondary);
   cursor: pointer;
@@ -38,7 +38,6 @@
   margin: 0;
   padding: 16px 0;
   text-align: center;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .cadastro-form {
@@ -79,7 +78,7 @@
   padding: 12px 16px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--input-background, #ffffff);
   color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
@@ -176,7 +175,7 @@
 /* Dark theme support */
 [data-theme="dark"] .form-input,
 [data-theme="dark"] .form-select {
-  background: var(--card-background);
+  background: var(--input-background);
   border-color: var(--border-color);
   color: var(--text-primary);
 }
@@ -185,6 +184,10 @@
 [data-theme="dark"] .form-select:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .form-input::placeholder {
+  color: var(--text-secondary);
 }
 
 /* Responsive */
