@@ -31,9 +31,8 @@ const sidebarItems: SidebarItem[] = [
 ];
 
 const escalarItems = [
-  { id: 'pautista', label: 'Pautista', icon: UserCheck },
-  { id: 'avaliador', label: 'Avaliador', icon: UserCog },
   { id: 'escala-avaliadores', label: 'Escala Avaliadores', icon: UserCog },
+  { id: 'escala-pautistas', label: 'Escala Pautistas', icon: UserCheck },
 ];
 
 const Sidebar: React.FC = () => {

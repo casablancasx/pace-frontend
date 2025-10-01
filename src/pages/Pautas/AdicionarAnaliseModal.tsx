@@ -70,21 +70,6 @@ const AdicionarAnaliseModal: React.FC<AdicionarAnaliseModalProps> = ({
         </div>
 
         <div className="modal-body">
-          <div className="audiencia-info">
-            <div className="info-row">
-              <strong>Processo:</strong> {audiencia.numeroProcesso}
-            </div>
-            <div className="info-row">
-              <strong>Parte:</strong> {audiencia.nomeParte}
-            </div>
-            <div className="info-row">
-              <strong>Assunto:</strong> {audiencia.assunto}
-            </div>
-            <div className="info-row">
-              <strong>Horário:</strong> {audiencia.hora}
-            </div>
-          </div>
-
           <div className="form-group">
             <label htmlFor="analise" className="form-label">
               Análise da Audiência

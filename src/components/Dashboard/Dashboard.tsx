@@ -28,12 +28,13 @@ const mockData: DashboardData = {
     },
     {
       id: 'tickets',
-      title: 'Tickets sold',
-      value: '5,888',
-      change: '+4.5%',
+      title: 'Avaliadores',
+      value: '10',
+      change: '',
       changeType: 'positive',
-      description: 'from last week'
+      description: ''
     },
+
   
   ],
   recentOrders: [
