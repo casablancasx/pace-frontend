@@ -306,6 +306,13 @@
   background: transparent;
 }
 
+.sidebar__loading {
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {

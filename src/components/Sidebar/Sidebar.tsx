@@ -45,23 +45,24 @@ const Sidebar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { currentPage, setCurrentPage } = useNavigation();
   const navigate = useNavigate();
-  const { allowedRoutes, userData } = useAuthorization();
+  const { allowedRoutes, userData, isLoading } = useAuthorization();
   const [isEscalarOpen, setIsEscalarOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   
   // Filtrar os itens do sidebar com base nas permissões do usuário
-  const sidebarItems = allSidebarItems.filter(item => 
+  // Se ainda estiver carregando, mostrar array vazio para evitar flickering
+  const sidebarItems = isLoading ? [] : allSidebarItems.filter(item => 
     allowedRoutes.includes(item.id)
   );
   
   // Filtrar os itens de escalar com base nas permissões do usuário
-  const escalarItems = allEscalarItems.filter(item => 
+  const escalarItems = isLoading ? [] : allEscalarItems.filter(item => 
     allowedRoutes.includes(item.id)
   );
   
   // Verificar se há itens de escalar disponíveis para o usuário
-  const hasEscalarItems = escalarItems.length > 0;
+  const hasEscalarItems = !isLoading && escalarItems.length > 0;
 
   const handlePageClick = (pageId: string) => {
     setCurrentPage(pageId as any); // Utilizamos 'as any' para evitar problemas de tipagem
@@ -107,8 +108,17 @@ const Sidebar: React.FC = () => {
 
       <nav className="sidebar__nav">
         <ul className="sidebar__list">
+          {/* Loading state */}
+          {isLoading && (
+            <li className="sidebar__item">
+              <div className="sidebar__loading">
+                Carregando...
+              </div>
+            </li>
+          )}
+          
           {/* Item Home - sempre mostrado primeiro */}
-          {sidebarItems.filter(item => item.id === 'home').map((item) => {
+          {!isLoading && sidebarItems.filter(item => item.id === 'home').map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (
@@ -125,7 +135,7 @@ const Sidebar: React.FC = () => {
           })}
           
           {/* Dropdown Escalar - apenas se o usuário tiver permissão */}
-          {hasEscalarItems && (
+          {!isLoading && hasEscalarItems && (
             <li className="sidebar__item">
               <button 
                 className={`sidebar__button sidebar__button--dropdown ${isEscalarOpen ? 'sidebar__button--open' : ''}`}
@@ -159,7 +169,7 @@ const Sidebar: React.FC = () => {
           )}
 
           {/* Outros itens do sidebar exceto home */}
-          {sidebarItems.filter(item => item.id !== 'home').map((item) => {
+          {!isLoading && sidebarItems.filter(item => item.id !== 'home').map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (

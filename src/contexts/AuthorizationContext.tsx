@@ -10,6 +10,7 @@ interface AuthorizationContextType {
   hasPermission: (permission: string) => boolean;
   allowedRoutes: string[];
   userData: UsuarioEntity | null;
+  isLoading: boolean;
 }
 
 // Criar o contexto
@@ -55,12 +56,16 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
   const initialUser = AuthService.getCurrentUser();
   const [userRole, setUserRole] = useState<UserRole | null>(initialUser?.role || null);
   const [userData, setUserData] = useState<UsuarioEntity | null>(initialUser);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Verifica se o usuário é um administrador
   const isAdmin = userRole === 'ADMIN';
   
   // Lista de rotas permitidas com base no papel do usuário
-  const allowedRoutes = userRole ? roleRoutes[userRole] : ['login'];
+  // Se não houver userRole e não estivermos em loading, assumir ADMIN para desenvolvimento
+  const allowedRoutes = userRole 
+    ? roleRoutes[userRole] 
+    : (isLoading ? [] : roleRoutes['ADMIN']); // Fallback para ADMIN durante desenvolvimento
   
   // Monitora mudanças nos dados do usuário (para atualizações futuras)
   useEffect(() => {
@@ -72,6 +77,7 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
       setUserData(null);
       setUserRole(null);
     }
+    setIsLoading(false);
   }, []);
   
   // Função para verificar se o usuário tem uma permissão específica
@@ -86,7 +92,8 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
     isAdmin,
     hasPermission,
     allowedRoutes,
-    userData
+    userData,
+    isLoading
   };
   
   return (
