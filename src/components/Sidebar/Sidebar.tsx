@@ -15,9 +15,12 @@ import {
   Moon,
   LogOut
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useNavigation } from '../../contexts/NavigationContext';
+import AuthService from '../../services/authService';
 import type { SidebarItem } from '../../types';
+import type { UsuarioEntity } from '../../types/auth';
 import './Sidebar.css';
 
 const sidebarItems: SidebarItem[] = [
@@ -38,9 +41,19 @@ const escalarItems = [
 const Sidebar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { currentPage, setCurrentPage } = useNavigation();
+  const navigate = useNavigate();
   const [isEscalarOpen, setIsEscalarOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const [userData, setUserData] = useState<UsuarioEntity | null>(null);
+
+  // Carregar dados do usuário do localStorage quando o componente for montado
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      setUserData(user);
+    }
+  }, []);
 
   const handlePageClick = (pageId: string) => {
     setCurrentPage(pageId as any);
@@ -55,9 +68,10 @@ const Sidebar: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Aqui você pode adicionar a lógica de logout
-    console.log('Logout realizado');
-    // Por exemplo: limpar tokens, redirecionar, etc.
+    // Usar o método de logout do AuthService
+    AuthService.logout();
+    // Redirecionar para a página de login
+    navigate('/login');
     setIsUserMenuOpen(false);
   };
 
@@ -180,8 +194,17 @@ const Sidebar: React.FC = () => {
               <User size={20} />
             </div>
             <div className="sidebar__user-info">
-              <span className="sidebar__user-name">Erica</span>
-              <span className="sidebar__user-email">erica@example.com</span>
+              <div className="sidebar__user-name-role">
+                <span className="sidebar__user-name">
+                  {userData?.nome 
+                    ? userData.nome.split(' ')[0].toUpperCase() 
+                    : 'Usuário'}
+                </span>
+                {userData?.role && (
+                  <span className="sidebar__user-role">- {userData.role}</span>
+                )}
+              </div>
+              <span className="sidebar__user-email">{userData?.email || 'email@agu.gov.br'}</span>
             </div>
             {isUserMenuOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
@@ -193,7 +216,7 @@ const Sidebar: React.FC = () => {
                 onClick={handleLogout}
               >
                 <LogOut size={16} />
-                <span>Sign out</span>
+                <span>Sair</span>
               </button>
             </div>
           )}
