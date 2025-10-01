@@ -544,3 +544,70 @@
   background: rgba(245, 101, 101, 0.15);
   border-color: rgba(245, 101, 101, 0.3);
 }
+
+/* Responsive Design - Ajusta padding e grid em telas menores */
+@media (max-width: 1600px) {
+  .pautas-page {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .pautas-page {
+    padding: 20px;
+  }
+  
+  .filters-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .pautas-page {
+    padding: 16px;
+  }
+  
+  .filters-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .pautas-table th,
+  .pautas-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pautas-page {
+    padding: 12px;
+  }
+  
+  .search-container {
+    max-width: 100%;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .pautas-table th,
+  .pautas-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  .status-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+  
+  .pagination-button {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}

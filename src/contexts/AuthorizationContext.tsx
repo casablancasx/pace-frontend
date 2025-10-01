@@ -51,8 +51,10 @@ interface AuthorizationProviderProps {
 
 // Provider do contexto
 export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ children }) => {
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
-  const [userData, setUserData] = useState<UsuarioEntity | null>(null);
+  // Carregar dados do usuário IMEDIATAMENTE na inicialização do estado
+  const initialUser = AuthService.getCurrentUser();
+  const [userRole, setUserRole] = useState<UserRole | null>(initialUser?.role || null);
+  const [userData, setUserData] = useState<UsuarioEntity | null>(initialUser);
   
   // Verifica se o usuário é um administrador
   const isAdmin = userRole === 'ADMIN';
@@ -60,12 +62,15 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
   // Lista de rotas permitidas com base no papel do usuário
   const allowedRoutes = userRole ? roleRoutes[userRole] : ['login'];
   
-  // Carrega os dados do usuário quando o componente é montado
+  // Monitora mudanças nos dados do usuário (para atualizações futuras)
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (user) {
       setUserData(user);
       setUserRole(user.role);
+    } else {
+      setUserData(null);
+      setUserRole(null);
     }
   }, []);
   
