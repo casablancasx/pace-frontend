@@ -1,12 +1,29 @@
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import Layout from '../Layout';
-import type { DashboardData, MetricCard } from '../../types';
+import MapaBrasil from '../MapaBrasil';
+import type { DashboardData, DashboardStateMetric, MetricCard } from '../../types';
 import './Dashboard.css';
 
 interface DashboardProps {
   data?: DashboardData;
 }
+
+const brazilMockStates: DashboardStateMetric[] = [
+  { UF: 'AC', pautas: 43, audiencias: 231 },
+  { UF: 'AM', pautas: 8, audiencias: 25 },
+  { UF: 'AP', pautas: 17, audiencias: 103 },
+  { UF: 'BA', pautas: 421, audiencias: 3640 },
+  { UF: 'DF', pautas: 44, audiencias: 146 },
+  { UF: 'GO', pautas: 149, audiencias: 842 },
+  { UF: 'MA', pautas: 210, audiencias: 1856 },
+  { UF: 'MT', pautas: 51, audiencias: 216 },
+  { UF: 'PA', pautas: 116, audiencias: 922 },
+  { UF: 'PI', pautas: 114, audiencias: 1335 },
+  { UF: 'RO', pautas: 1, audiencias: 2 },
+  { UF: 'RR', pautas: 7, audiencias: 38 },
+  { UF: 'TO', pautas: 55, audiencias: 423 }
+];
 
 const mockData: DashboardData = {
   metrics: [
@@ -37,6 +54,7 @@ const mockData: DashboardData = {
 
   
   ],
+  states: brazilMockStates,
   recentOrders: [
     {
       orderNumber: '3000',
@@ -138,6 +156,16 @@ const Dashboard: React.FC<DashboardProps> = ({ data = mockData }) => {
           {data.metrics.map((metric) => (
             <MetricCardComponent key={metric.id} metric={metric} />
           ))}
+        </div>
+      </section>
+
+      <section className="dashboard__map-section">
+        <div className="dashboard__map-card">
+          <div className="dashboard__map-header">
+            <h2 className="dashboard__section-title">Distribuição de audiências</h2>
+            <span className="dashboard__map-subtitle">Passe o mouse sobre um estado para ver os detalhes</span>
+          </div>
+          <MapaBrasil data={data.states} />
         </div>
       </section>
 

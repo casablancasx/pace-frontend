@@ -15,5 +15,6 @@ export type {
   SidebarItem, 
   MetricCard, 
   Order, 
-  DashboardData 
+  DashboardData,
+  DashboardStateMetric
 } from '../types';

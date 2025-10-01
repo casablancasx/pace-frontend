@@ -23,7 +23,14 @@ export interface Order {
   amount: string;
 }
 
+export interface DashboardStateMetric {
+  UF: string;
+  pautas: number;
+  audiencias: number;
+}
+
 export interface DashboardData {
   metrics: MetricCard[];
   recentOrders: Order[];
+  states: DashboardStateMetric[];
 }

@@ -56,6 +56,30 @@
   margin-bottom: 48px;
 }
 
+.dashboard__map-section {
+  margin-bottom: 48px;
+}
+
+.dashboard__map-card {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard__map-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.dashboard__map-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
 .dashboard__section-title {
   font-size: 18px;
   font-weight: 600;
@@ -209,6 +233,10 @@
   .dashboard__metrics {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .dashboard__map-card {
+    padding: 24px;
   }
   
   .orders-table {
