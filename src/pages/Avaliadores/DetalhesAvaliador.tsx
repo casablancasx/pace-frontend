@@ -53,11 +53,11 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
   return (
     <Layout>
       <div className="detalhes-avaliador-page">
+        <button className="voltar-button" onClick={onVoltar}>
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
         <div className="detalhes-header">
-          <button className="voltar-button" onClick={onVoltar}>
-            <ArrowLeft size={20} />
-            Voltar
-          </button>
           <h1 className="detalhes-title">Detalhes Avaliador</h1>
         </div>
 

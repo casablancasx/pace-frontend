@@ -72,11 +72,11 @@ const EdicaoAvaliador: React.FC<EdicaoAvaliadorProps> = ({ avaliador, onVoltar, 
   return (
     <Layout>
       <div className="cadastro-avaliador-page">
+        <button onClick={onVoltar} className="voltar-button">
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
         <div className="cadastro-header">
-          <button onClick={onVoltar} className="voltar-button">
-            <ArrowLeft size={20} />
-            Voltar
-          </button>
           <h1 className="cadastro-title">Editar Avaliador</h1>
         </div>
 

@@ -43,11 +43,11 @@ const CadastroPautista: React.FC<CadastroPautistaProps> = ({ onVoltar }) => {
   return (
     <Layout>
       <div className="cadastro-pautista-page">
+        <button onClick={onVoltar} className="voltar-button">
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
         <div className="cadastro-header">
-          <button onClick={onVoltar} className="voltar-button">
-            <ArrowLeft size={20} />
-            Voltar
-          </button>
           <h1 className="cadastro-title">Cadastrar Pautista</h1>
         </div>
 

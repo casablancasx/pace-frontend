@@ -122,11 +122,11 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
   return (
     <Layout>
       <div className="detalhes-pauta-page">
+        <button onClick={navigateBackToPautas} className="voltar-button">
+          <ArrowLeft size={16} />
+          Voltar
+        </button>
         <div className="detalhes-header">
-          <button onClick={navigateBackToPautas} className="voltar-button">
-            <ArrowLeft size={16} />
-            Voltar
-          </button>
           <h1 className="page-title">Detalhes da Pauta</h1>
         </div>
 

@@ -72,11 +72,11 @@ const EdicaoPautista: React.FC<EdicaoPautistaProps> = ({ pautista, onVoltar, onS
   return (
     <Layout>
       <div className="cadastro-pautista-page">
+        <button onClick={onVoltar} className="voltar-button">
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
         <div className="cadastro-header">
-          <button onClick={onVoltar} className="voltar-button">
-            <ArrowLeft size={20} />
-            Voltar
-          </button>
           <h1 className="cadastro-title">Editar Pautista</h1>
         </div>
 

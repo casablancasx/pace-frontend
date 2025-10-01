@@ -53,11 +53,11 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
   return (
     <Layout>
       <div className="detalhes-pautista-page">
+        <button className="voltar-button" onClick={onVoltar}>
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
         <div className="detalhes-header">
-          <button className="voltar-button" onClick={onVoltar}>
-            <ArrowLeft size={20} />
-            Voltar
-          </button>
           <h1 className="detalhes-title">Detalhes Pautista</h1>
         </div>
 
