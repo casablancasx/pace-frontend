@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
 import Sidebar from './components/Sidebar';
@@ -10,6 +11,7 @@ import EscalaAvaliadores from './pages/EscalaAvaliadores';
 import ImportarPlanilha from './components/ImportarPlanilha';
 import Pautas from './pages/Pautas';
 import DetalhesPauta from './pages/Pautas/DetalhesPauta';
+import Login from './pages/Login/Login';
 import './App.css';
 
 const AppContent: React.FC = () => {
@@ -73,9 +75,14 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <NavigationProvider>
-        <AppContent />
-      </NavigationProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/*" element={
+          <NavigationProvider>
+            <AppContent />
+          </NavigationProvider>
+        } />
+      </Routes>
     </ThemeProvider>
   );
 };
