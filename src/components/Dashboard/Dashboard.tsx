@@ -3,7 +3,9 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 import Layout from '../Layout';
 import MapaBrasil from '../MapaBrasil';
 import AudienceSubjectBarChart from './AudienceSubjectBarChart';
+import AudienceYearChart from './AudienceYearChart';
 import type { AudienceSubjectMetric } from './AudienceSubjectBarChart';
+import type { AudienceYearMetric } from './AudienceYearChart';
 import type { DashboardData, DashboardStateMetric, MetricCard } from '../../types';
 import { useAuthorization } from '../../contexts/AuthorizationContext';
 import './Dashboard.css';
@@ -104,6 +106,15 @@ const audienceSubjectData: AudienceSubjectMetric[] = [
   { assunto: 'Urbana (art. 42/44)', audiencias: 4 },
   { assunto: 'Urbana (Pensão por Morte (Art. 74/9))', audiencias: 16 },
   { assunto: 'Urbano (art. 60)', audiencias: 10 }
+];
+
+const audienceYearData: AudienceYearMetric[] = [
+  { ano: 2019, audiencias: 8542 },
+  { ano: 2020, audiencias: 12780 },
+  { ano: 2021, audiencias: 15632 },
+  { ano: 2022, audiencias: 18245 },
+  { ano: 2023, audiencias: 22156 },
+  { ano: 2024, audiencias: 25489 }
 ];
 
 const mockData: DashboardData = {
@@ -269,30 +280,8 @@ const Dashboard: React.FC<DashboardProps> = ({ data = mockData }) => {
         </div>
       </section>
 
-      <section className="dashboard__orders">
-        <h2 className="dashboard__section-title">Recent orders</h2>
-        
-        <div className="orders-table">
-          <div className="orders-table__header">
-            <div className="orders-table__cell orders-table__cell--header">Order number</div>
-            <div className="orders-table__cell orders-table__cell--header">Purchase date</div>
-            <div className="orders-table__cell orders-table__cell--header">Customer</div>
-            <div className="orders-table__cell orders-table__cell--header">Event</div>
-            <div className="orders-table__cell orders-table__cell--header">Amount</div>
-          </div>
-          
-          <div className="orders-table__body">
-            {data.recentOrders.map((order) => (
-              <div key={order.orderNumber} className="orders-table__row">
-                <div className="orders-table__cell">{order.orderNumber}</div>
-                <div className="orders-table__cell">{order.purchaseDate}</div>
-                <div className="orders-table__cell">{order.customer}</div>
-                <div className="orders-table__cell">{order.event}</div>
-                <div className="orders-table__cell">{order.amount}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section className="dashboard__year-chart">
+        <AudienceYearChart data={audienceYearData} />
       </section>
     </Layout>
   );

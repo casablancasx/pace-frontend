@@ -1,0 +1,100 @@
+.audience-year-chart {
+  background: var(--card-background, white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--card-shadow, 0 1px 3px rgba(0, 0, 0, 0.1));
+  border: 1px solid var(--border-color, #e5e7eb);
+  margin-top: 24px;
+}
+
+[data-theme="dark"] .audience-year-chart {
+  background: var(--card-background);
+  border-color: var(--border-color);
+}
+
+.audience-year-chart__header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  padding-bottom: 16px;
+}
+
+.audience-year-chart__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+  margin: 0;
+}
+
+[data-theme="dark"] .audience-year-chart__header {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .audience-year-chart__title {
+  color: var(--text-primary);
+}
+
+.audience-year-chart__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.audience-year-chart__chart-container {
+  padding: 20px 0;
+  min-height: 350px;
+}
+
+.audience-year-chart__tooltip {
+  background: rgba(0, 0, 0, 0.8);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.audience-year-chart__tooltip-label {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.audience-year-chart__tooltip-value {
+  color: #3b82f6;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .audience-year-chart {
+    padding: 16px;
+  }
+  
+  .audience-year-chart__chart-container {
+    min-height: 300px;
+  }
+  
+  .audience-year-chart__tooltip-label,
+  .audience-year-chart__tooltip-value {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .audience-year-chart__chart-container {
+    min-height: 250px;
+  }
+  
+  .audience-year-chart__tooltip {
+    padding: 8px 12px;
+  }
+  
+  .audience-year-chart__tooltip-label,
+  .audience-year-chart__tooltip-value {
+    font-size: 11px;
+  }
+}
