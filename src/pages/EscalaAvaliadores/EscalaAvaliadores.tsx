@@ -3,11 +3,13 @@ import { Calendar, Users, MapPin } from 'lucide-react';
 import Layout from '../../components/Layout';
 import TagInput from '../../components/TagInput';
 import AudienciasPendentes from '../../components/AudienciasPendentes';
+import EspecieTarefaAutocomplete from '../../components/EscalaAvaliadores/EspecieTarefaAutocomplete';
 import './EscalaAvaliadores.css';
 
 interface EscalaAvaliadorForm {
   setorOrigemId: string;
   especieTarefaId: string;
+  especieTarefaNome: string;
   dataInicio: string;
   dataFim: string;
   uf: string;
@@ -88,6 +90,7 @@ const EscalaAvaliadores: React.FC = () => {
   const [form, setForm] = useState<EscalaAvaliadorForm>({
     setorOrigemId: '',
     especieTarefaId: '',
+    especieTarefaNome: '',
     dataInicio: '',
     dataFim: '',
     uf: '',
@@ -102,6 +105,31 @@ const EscalaAvaliadores: React.FC = () => {
     setForm(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleEspecieTarefaChange = (valor: string) => {
+    setForm(prev => {
+      const trimmed = valor.trim();
+      const previous = prev.especieTarefaNome?.trim() ?? '';
+      const needsReset = trimmed === '' || trimmed !== previous;
+
+      return {
+        ...prev,
+        especieTarefaNome: valor,
+        ...(needsReset ? { especieTarefaId: '' } : {}),
+      };
+    });
+  };
+
+  const handleEspecieTarefaSelect = (especie: any) => {
+    const nome = especie?.nome ?? '';
+    const id = especie?.id ? String(especie.id) : '';
+
+    setForm(prev => ({
+      ...prev,
+      especieTarefaNome: nome,
+      especieTarefaId: id,
     }));
   };
 
@@ -136,6 +164,7 @@ const EscalaAvaliadores: React.FC = () => {
       setForm({
         setorOrigemId: '',
         especieTarefaId: '',
+        especieTarefaNome: '',
         dataInicio: '',
         dataFim: '',
         uf: '',
@@ -191,19 +220,16 @@ const EscalaAvaliadores: React.FC = () => {
 
               {/* Espécie Tarefa */}
               <div className="form-group">
-                <label htmlFor="especieTarefaId" className="form-label">
+                <label htmlFor="especieTarefa" className="form-label">
                   Espécie Tarefa
                 </label>
-                <input
-                  type="text"
-                  id="especieTarefaId"
-                  name="especieTarefaId"
-                  value={form.especieTarefaId}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="Digite a espécie da tarefa"
-                  required
+                <EspecieTarefaAutocomplete
+                  value={form.especieTarefaNome}
+                  onChange={handleEspecieTarefaChange}
+                  onSelect={handleEspecieTarefaSelect}
+                  placeholder="Busque a espécie da tarefa"
                 />
+                <input type="hidden" name="especieTarefaId" value={form.especieTarefaId} />
               </div>
 
               {/* Data Início */}
