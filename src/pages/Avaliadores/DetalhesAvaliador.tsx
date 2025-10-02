@@ -97,7 +97,7 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
               <div className="info-grid">
                 <div className="info-item">
                   <Phone size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Telefone</span>
                     <span className="info-value">{avaliador.telefone}</span>
                   </div>
@@ -105,7 +105,7 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
 
                 <div className="info-item">
                   <Mail size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">E-mail</span>
                     <span className="info-value">{avaliador.email}</span>
                   </div>
@@ -113,7 +113,7 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
 
                 <div className="info-item">
                   <User size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Adicionado por</span>
                     <span className="info-value">{avaliador.adicionadoPor}</span>
                   </div>
@@ -126,7 +126,7 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
               <div className="info-grid">
                 <div className="info-item">
                   <MapPin size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Setor</span>
                     <span className="info-value">{avaliador.setor}</span>
                   </div>
@@ -134,7 +134,7 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
 
                 <div className="info-item">
                   <MapPin size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Unidade</span>
                     <span className="info-value">{avaliador.unidade}</span>
                   </div>
@@ -142,7 +142,7 @@ const DetalhesAvaliador: React.FC<DetalhesAvaliadorProps> = ({ avaliador, onVolt
 
                 <div className="info-item">
                   <Award size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Sapiens ID</span>
                     <span className="info-value">#{avaliador.sapiensId}</span>
                   </div>

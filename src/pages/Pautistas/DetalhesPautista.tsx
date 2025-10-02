@@ -97,7 +97,7 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
               <div className="info-grid">
                 <div className="info-item">
                   <Phone size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Telefone</span>
                     <span className="info-value">{pautista.telefone}</span>
                   </div>
@@ -105,7 +105,7 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
 
                 <div className="info-item">
                   <Mail size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">E-mail</span>
                     <span className="info-value">{pautista.email}</span>
                   </div>
@@ -113,7 +113,7 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
 
                 <div className="info-item">
                   <User size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Adicionado por</span>
                     <span className="info-value">{pautista.adicionadoPor}</span>
                   </div>
@@ -126,7 +126,7 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
               <div className="info-grid">
                 <div className="info-item">
                   <MapPin size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Setor</span>
                     <span className="info-value">{pautista.setor}</span>
                   </div>
@@ -134,7 +134,7 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
 
                 <div className="info-item">
                   <MapPin size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Unidade</span>
                     <span className="info-value">{pautista.unidade}</span>
                   </div>
@@ -142,7 +142,7 @@ const DetalhesPautista: React.FC<DetalhesPautistaProps> = ({ pautista, onVoltar 
 
                 <div className="info-item">
                   <Award size={18} />
-                  <div>
+                  <div className="info-content">
                     <span className="info-label">Sapiens ID</span>
                     <span className="info-value">#{pautista.sapiensId}</span>
                   </div>

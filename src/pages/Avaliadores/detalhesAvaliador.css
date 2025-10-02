@@ -215,14 +215,18 @@
 
 .info-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  padding: 12px 0;
 }
 
 .info-item svg {
   color: var(--text-secondary);
   flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.info-content {
+  flex: 1;
 }
 
 .info-label {
@@ -241,6 +245,8 @@
   color: var(--text-primary);
   font-weight: 500;
 }
+
+
 
 /* Form Styles */
 .form-grid {
