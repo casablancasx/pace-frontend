@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Layout from '../../components/Layout';
+import ColaboradorAutocomplete from '../../components/Avaliadores/ColaboradorAutocomplete';
 import './cadastroAvaliador.css';
 
 interface CadastroAvaliadorForm {
@@ -34,6 +35,37 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
     }));
   };
 
+  const handleNomeChange = (valor: string) => {
+    setForm(prev => {
+      const trimmed = valor.trim();
+      const nomeAnterior = prev.nome?.trim() ?? '';
+      const needsReset = trimmed === '' || trimmed !== nomeAnterior;
+
+      return {
+        ...prev,
+        nome: valor,
+        ...(needsReset ? { setor: '', unidade: '', sapiensId: '' } : {}),
+      };
+    });
+  };
+
+  const handleColaboradorSelect = (lotacao: any) => {
+    const nome = lotacao?.colaborador?.usuario?.nome ?? '';
+    const unidade = lotacao?.setor?.unidade?.nome ?? '';
+    const setor = lotacao?.setor?.nome ?? '';
+    const sapiensId = lotacao?.colaborador?.id ? String(lotacao.colaborador.id) : '';
+    const email = lotacao?.colaborador?.usuario?.email ?? '';
+
+    setForm(prev => ({
+      ...prev,
+      nome,
+      unidade,
+      setor,
+      sapiensId,
+      email: email || prev.email,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Aqui seria a lógica de cadastro
@@ -60,15 +92,11 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
               <p className="form-description">
                 Nome completo do avaliador que será exibido no sistema.
               </p>
-              <input
-                type="text"
-                id="nome"
-                name="nome"
+              <ColaboradorAutocomplete
                 value={form.nome}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Digite o nome completo"
-                required
+                onChange={handleNomeChange}
+                onSelect={handleColaboradorSelect}
+                placeholder="Digite o nome do colaborador"
               />
             </div>
 
@@ -118,21 +146,16 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
               <p className="form-description">
                 Setor de atuação do avaliador no tribunal.
               </p>
-              <select
+              <input
+                type="text"
                 id="setor"
                 name="setor"
                 value={form.setor}
                 onChange={handleInputChange}
-                className="form-select"
+                className="form-input"
+                placeholder="Selecione um colaborador para preencher"
                 required
-              >
-                <option value="">Selecione o setor</option>
-                <option value="Civil">Civil</option>
-                <option value="Criminal">Criminal</option>
-                <option value="Trabalhista">Trabalhista</option>
-                <option value="Família">Família</option>
-                <option value="Tributário">Tributário</option>
-              </select>
+              />
             </div>
 
             <div className="form-group">
@@ -162,14 +185,15 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
                 Identificador do avaliador no sistema Sapiens.
               </p>
               <input
-                type="number"
+                type="text"
                 id="sapiensId"
                 name="sapiensId"
                 value={form.sapiensId}
                 onChange={handleInputChange}
                 className="form-input"
-                placeholder="123456"
+                placeholder="Será preenchido automaticamente"
                 required
+                readOnly
               />
             </div>
           </div>
