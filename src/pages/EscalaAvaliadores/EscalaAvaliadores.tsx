@@ -4,10 +4,12 @@ import Layout from '../../components/Layout';
 import TagInput from '../../components/TagInput';
 import AudienciasPendentes from '../../components/AudienciasPendentes';
 import EspecieTarefaAutocomplete from '../../components/EscalaAvaliadores/EspecieTarefaAutocomplete';
+import SetorResponsavelAutocomplete from '../../components/EscalaAvaliadores/SetorResponsavelAutocomplete';
 import './EscalaAvaliadores.css';
 
 interface EscalaAvaliadorForm {
   setorOrigemId: string;
+  setorOrigemNome: string;
   especieTarefaId: string;
   especieTarefaNome: string;
   dataInicio: string;
@@ -89,6 +91,7 @@ const avaliadores = [
 const EscalaAvaliadores: React.FC = () => {
   const [form, setForm] = useState<EscalaAvaliadorForm>({
     setorOrigemId: '',
+    setorOrigemNome: '',
     especieTarefaId: '',
     especieTarefaNome: '',
     dataInicio: '',
@@ -133,6 +136,31 @@ const EscalaAvaliadores: React.FC = () => {
     }));
   };
 
+  const handleSetorChange = (valor: string) => {
+    setForm(prev => {
+      const trimmed = valor.trim();
+      const previous = prev.setorOrigemNome?.trim() ?? '';
+      const needsReset = trimmed === '' || trimmed !== previous;
+
+      return {
+        ...prev,
+        setorOrigemNome: valor,
+        ...(needsReset ? { setorOrigemId: '' } : {}),
+      };
+    });
+  };
+
+  const handleSetorSelect = (setor: any) => {
+    const nome = setor?.nome ?? '';
+    const id = setor?.id ? String(setor.id) : '';
+
+    setForm(prev => ({
+      ...prev,
+      setorOrigemNome: nome,
+      setorOrigemId: id,
+    }));
+  };
+
   const handleOrgaoJulgadorChange = (selectedIds: (number | string)[]) => {
     setForm(prev => ({
       ...prev,
@@ -163,6 +191,7 @@ const EscalaAvaliadores: React.FC = () => {
       // Reset form
       setForm({
         setorOrigemId: '',
+        setorOrigemNome: '',
         especieTarefaId: '',
         especieTarefaNome: '',
         dataInicio: '',
@@ -206,16 +235,13 @@ const EscalaAvaliadores: React.FC = () => {
                 <label htmlFor="setorOrigemId" className="form-label">
                   Setor Origem
                 </label>
-                <input
-                  type="text"
-                  id="setorOrigemId"
-                  name="setorOrigemId"
-                  value={form.setorOrigemId}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="Digite o setor de origem"
-                  required
+                <SetorResponsavelAutocomplete
+                  value={form.setorOrigemNome}
+                  onChange={handleSetorChange}
+                  onSelect={handleSetorSelect}
+                  placeholder="Busque o setor responsável"
                 />
+                <input type="hidden" name="setorOrigemId" value={form.setorOrigemId} />
               </div>
 
               {/* Espécie Tarefa */}
