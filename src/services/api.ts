@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Obter a URL base da API do arquivo .env
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:9091';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 // Criar uma instância do Axios com configurações padrão
 const api = axios.create({
@@ -27,7 +27,6 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor de resposta - tratamento global de erros
 api.interceptors.response.use(
   (response) => {
     return response;

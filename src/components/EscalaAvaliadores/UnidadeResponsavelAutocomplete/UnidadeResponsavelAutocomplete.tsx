@@ -24,6 +24,7 @@ const UnidadeResponsavelAutocomplete: React.FC<UnidadeResponsavelAutocompletePro
   disabled = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const skipNextFetch = useRef(false);
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +35,11 @@ const UnidadeResponsavelAutocomplete: React.FC<UnidadeResponsavelAutocompletePro
   const shouldSearch = normalizedValue.length >= minLength;
 
   useEffect(() => {
+    if (skipNextFetch.current) {
+      skipNextFetch.current = false;
+      return;
+    }
+
     if (!shouldSearch || disabled) {
       setOptions([]);
       setIsOpen(false);
@@ -46,7 +52,7 @@ const UnidadeResponsavelAutocomplete: React.FC<UnidadeResponsavelAutocompletePro
 
     const timeoutId = window.setTimeout(async () => {
       try {
-        const response = await SuperSapiensService.getUnidadesResponsaveis(normalizedValue);
+        const response = await SuperSapiensService.getSetoresResponsaveis(normalizedValue);
         setOptions(Array.isArray(response) ? response : []);
         setIsOpen(true);
         setHighlightIndex(-1);
@@ -81,7 +87,7 @@ const UnidadeResponsavelAutocomplete: React.FC<UnidadeResponsavelAutocompletePro
     const terms = normalizedValue.toUpperCase().split(/\s+/).filter(Boolean);
 
     return options.map((unidade) => {
-      const nome = unidade?.nome ?? '';
+      const nome = `${unidade?.nome} (${unidade?.unidade?.sigla ?? 'N/A'})`;
 
       const highlightedName = terms.reduce((acc, term) => {
         const regex = new RegExp(`(${term})`, 'gi');
@@ -97,6 +103,7 @@ const UnidadeResponsavelAutocomplete: React.FC<UnidadeResponsavelAutocompletePro
   }, [options, normalizedValue]);
 
   const handleOptionSelect = (option: any) => {
+    skipNextFetch.current = true;
     onSelect(option);
     setIsOpen(false);
   };

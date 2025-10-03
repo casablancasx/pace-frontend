@@ -24,6 +24,7 @@ const ColaboradorAutocomplete: React.FC<ColaboradorAutocompleteProps> = ({
   disabled = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const skipNextFetch = useRef(false);
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +35,10 @@ const ColaboradorAutocomplete: React.FC<ColaboradorAutocompleteProps> = ({
   const shouldSearch = normalizedValue.length >= minLength;
 
   useEffect(() => {
+    if (skipNextFetch.current) {
+      skipNextFetch.current = false;
+      return;
+    }
     if (!shouldSearch || disabled) {
       setOptions([]);
       setIsOpen(false);
@@ -78,6 +83,7 @@ const ColaboradorAutocomplete: React.FC<ColaboradorAutocompleteProps> = ({
   }, []);
 
   const handleOptionSelect = (option: any) => {
+    skipNextFetch.current = true;
     onSelect(option);
     setIsOpen(false);
   };

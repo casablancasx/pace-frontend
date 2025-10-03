@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react';
 import Layout from '../../components/Layout';
 import ColaboradorAutocomplete from '../../components/Avaliadores/ColaboradorAutocomplete';
+import avaliadorService from '../../services/avaliadorService';
 import './cadastroAvaliador.css';
 
 interface CadastroAvaliadorForm {
   nome: string;
   telefone: string;
   email: string;
-  setor: string;
-  unidade: string;
-  sapiensId: string;
+  setor: {
+    setorId: number;
+    nome: string;
+  } | null;
+  unidade: {
+    unidadeId: number;
+    nome: string;
+  } | null;
 }
 
 interface CadastroAvaliadorProps {
@@ -22,10 +28,13 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
     nome: '',
     telefone: '',
     email: '',
-    setor: '',
-    unidade: '',
-    sapiensId: ''
+    setor: null,
+    unidade: null
   });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -44,32 +53,81 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
       return {
         ...prev,
         nome: valor,
-        ...(needsReset ? { setor: '', unidade: '', sapiensId: '' } : {}),
+        ...(needsReset ? { setor: null, unidade: null } : {}),
       };
     });
   };
 
   const handleColaboradorSelect = (lotacao: any) => {
     const nome = lotacao?.colaborador?.usuario?.nome ?? '';
-    const unidade = lotacao?.setor?.unidade?.nome ?? '';
-    const setor = lotacao?.setor?.nome ?? '';
-    const sapiensId = lotacao?.colaborador?.id ? String(lotacao.colaborador.id) : '';
     const email = lotacao?.colaborador?.usuario?.email ?? '';
+    
+    const unidadeData = lotacao?.setor?.unidade;
+    const setorData = lotacao?.setor;
+
+    const unidade = unidadeData?.id ? {
+      unidadeId: Number(unidadeData.id),
+      nome: unidadeData.nome ?? ''
+    } : null;
+
+    const setor = setorData?.id ? {
+      setorId: Number(setorData.id),
+      nome: setorData.nome ?? ''
+    } : null;
 
     setForm(prev => ({
       ...prev,
       nome,
+      email: email || prev.email,
       unidade,
       setor,
-      sapiensId,
-      email: email || prev.email,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui seria a lógica de cadastro
-    console.log('Formulário enviado:', form);
+    
+    // Validação
+    if (!form.nome.trim()) {
+      setError('Por favor, selecione um colaborador.');
+      return;
+    }
+
+    if (!form.email.trim()) {
+      setError('Por favor, informe o email.');
+      return;
+    }
+
+    if (!form.setor || !form.unidade) {
+      setError('Por favor, selecione um colaborador válido com setor e unidade.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      await avaliadorService.cadastrarAvaliador({
+        nome: form.nome,
+        email: form.email,
+        telefone: form.telefone,
+        disponivel: true,
+        setor: form.setor,
+        unidade: form.unidade
+      });
+
+      setSuccess(true);
+      
+      // Limpar formulário após 2 segundos e voltar
+      setTimeout(() => {
+        onVoltar();
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Erro ao cadastrar avaliador. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,6 +142,20 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="cadastro-form">
+          {error && (
+            <div className="alert alert-error">
+              <XCircle size={20} />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div className="alert alert-success">
+              <CheckCircle2 size={20} />
+              <span>Avaliador cadastrado com sucesso!</span>
+            </div>
+          )}
+
           <div className="form-section">
             <div className="form-group">
               <label className="form-label" htmlFor="nome">
@@ -102,7 +174,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="telefone">
-                Telefone
+                Telefone <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>(opcional)</span>
               </label>
               <p className="form-description">
                 Número de telefone para contato do avaliador.
@@ -115,7 +187,6 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
                 onChange={handleInputChange}
                 className="form-input"
                 placeholder="(11) 99999-9999"
-                required
               />
             </div>
 
@@ -150,11 +221,11 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
                 type="text"
                 id="setor"
                 name="setor"
-                value={form.setor}
-                onChange={handleInputChange}
+                value={form.setor?.nome || ''}
                 className="form-input"
                 placeholder="Selecione um colaborador para preencher"
                 required
+                readOnly
               />
             </div>
 
@@ -169,41 +240,22 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
                 type="text"
                 id="unidade"
                 name="unidade"
-                value={form.unidade}
-                onChange={handleInputChange}
+                value={form.unidade?.nome || ''}
                 className="form-input"
-                placeholder="Ex: 1ª Vara Cível"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="sapiensId">
-                ID Sapiens
-              </label>
-              <p className="form-description">
-                Identificador do avaliador no sistema Sapiens.
-              </p>
-              <input
-                type="text"
-                id="sapiensId"
-                name="sapiensId"
-                value={form.sapiensId}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Será preenchido automaticamente"
+                placeholder="Selecione um colaborador para preencher"
                 required
                 readOnly
               />
             </div>
+
           </div>
 
           <div className="form-actions">
-            <button type="button" onClick={onVoltar} className="cancel-button">
+            <button type="button" onClick={onVoltar} className="cancel-button" disabled={loading}>
               Cancelar
             </button>
-            <button type="submit" className="submit-button">
-              Cadastrar Avaliador
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? 'Cadastrando...' : 'Cadastrar Avaliador'}
             </button>
           </div>
         </form>
