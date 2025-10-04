@@ -21,14 +21,26 @@ export interface AvaliadorRequestDTO {
 }
 
 export interface AvaliadorResponseDTO {
-  id: number;
+  avaliadorId: number;
   nome: string;
   email: string;
   telefone: string;
-  disponivel: boolean;
+  setor: string;
+  unidade: string;
   sapiensId: number;
-  setor: SetoRequestDTO;
-  unidade: UnidadeRequestDTO;
+  quantidadeAudiencias: number;
+  quantidadePautas: number;
+  score: number;
+  disponivel: boolean;
+  adicionadoPor: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 class AvaliadorService {
@@ -53,12 +65,34 @@ class AvaliadorService {
   }
 
   /**
-   * Lista todos os avaliadores
-   * @returns Promise com a lista de avaliadores
+   * Lista todos os avaliadores com paginação e filtros
+   * @param page - Número da página (baseado em 0)
+   * @param size - Tamanho da página
+   * @param nome - Filtro opcional por nome
+   * @param sort - Campo para ordenação (padrão: nome)
+   * @returns Promise com a resposta paginada de avaliadores
    */
-  async listarAvaliadores(): Promise<AvaliadorResponseDTO[]> {
+  async listarAvaliadores(
+    page: number = 0,
+    size: number = 10,
+    nome?: string,
+    sort: string = 'nome'
+  ): Promise<PageResponse<AvaliadorResponseDTO>> {
     try {
-      const response = await api.get<AvaliadorResponseDTO[]>('/avaliador');
+      const params: any = {
+        page,
+        size,
+        sort
+      };
+
+      if (nome) {
+        params.nome = nome;
+      }
+
+      const response = await api.get<PageResponse<AvaliadorResponseDTO>>('/avaliador', {
+        params
+      });
+
       return response.data;
     } catch (error: any) {
       console.error('Erro ao listar avaliadores:', error);
