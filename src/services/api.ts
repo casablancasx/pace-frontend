@@ -16,7 +16,7 @@ const api = axios.create({
 // Interceptor de requisição - adiciona token a todas as requisições quando disponível
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
+    const token = sessionStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -34,8 +34,8 @@ api.interceptors.response.use(
   (error) => {
     // Tratamento de erros 401 (não autorizado) - logout automático
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user_data');
+      sessionStorage.removeItem('auth_token');
+      sessionStorage.removeItem('user_data');
       window.location.href = '/login';
     }
     return Promise.reject(error);
