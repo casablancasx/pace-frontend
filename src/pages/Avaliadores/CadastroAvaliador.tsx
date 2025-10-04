@@ -9,6 +9,7 @@ interface CadastroAvaliadorForm {
   nome: string;
   telefone: string;
   email: string;
+  sapiensId: number | null;
   setor: {
     setorId: number;
     nome: string;
@@ -28,6 +29,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
     nome: '',
     telefone: '',
     email: '',
+    sapiensId: null,
     setor: null,
     unidade: null
   });
@@ -53,7 +55,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
       return {
         ...prev,
         nome: valor,
-        ...(needsReset ? { setor: null, unidade: null } : {}),
+        ...(needsReset ? { setor: null, unidade: null, sapiensId: null } : {}),
       };
     });
   };
@@ -61,6 +63,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
   const handleColaboradorSelect = (lotacao: any) => {
     const nome = lotacao?.colaborador?.usuario?.nome ?? '';
     const email = lotacao?.colaborador?.usuario?.email ?? '';
+    const sapiensId = lotacao?.colaborador?.usuario?.id ?? null;
     
     const unidadeData = lotacao?.setor?.unidade;
     const setorData = lotacao?.setor;
@@ -79,6 +82,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
       ...prev,
       nome,
       email: email || prev.email,
+      sapiensId,
       unidade,
       setor,
     }));
@@ -103,6 +107,11 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
       return;
     }
 
+    if (!form.sapiensId) {
+      setError('Por favor, selecione um colaborador válido do Sapiens.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -113,6 +122,7 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
         email: form.email,
         telefone: form.telefone,
         disponivel: true,
+        sapiensId: form.sapiensId,
         setor: form.setor,
         unidade: form.unidade
       });

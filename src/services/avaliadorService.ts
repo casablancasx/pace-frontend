@@ -15,6 +15,7 @@ export interface AvaliadorRequestDTO {
   email: string;
   telefone: string;
   disponivel: boolean;
+  sapiensId: number;
   setor: SetoRequestDTO;
   unidade: UnidadeRequestDTO;
 }
@@ -25,6 +26,7 @@ export interface AvaliadorResponseDTO {
   email: string;
   telefone: string;
   disponivel: boolean;
+  sapiensId: number;
   setor: SetoRequestDTO;
   unidade: UnidadeRequestDTO;
 }
