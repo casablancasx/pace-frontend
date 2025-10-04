@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import type { DragEvent } from 'react';
 import { Upload, File, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import Layout from '../Layout';
+import planilhaService from '../../services/planilhaService';
 import './ImportarPlanilha.css';
 
 interface FileUploadProps {
@@ -98,21 +99,37 @@ const ImportarPlanilha: React.FC = () => {
     });
   };
 
-  const simulateUpload = () => {
+  const simulateUpload = async () => {
     if (!uploadState.file) return;
 
     setUploadState(prev => ({ ...prev, status: 'uploading', progress: 0 }));
 
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadState(prev => {
-        if (prev.progress >= 100) {
-          clearInterval(interval);
-          return { ...prev, status: 'success', progress: 100 };
+    try {
+      await planilhaService.importarPlanilha(
+        uploadState.file,
+        (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadState(prev => ({ ...prev, progress: percentCompleted }));
+          }
         }
-        return { ...prev, progress: prev.progress + 10 };
-      });
-    }, 200);
+      );
+
+      setUploadState(prev => ({
+        ...prev,
+        status: 'success',
+        progress: 100
+      }));
+    } catch (error: any) {
+      setUploadState(prev => ({
+        ...prev,
+        status: 'error',
+        progress: 0,
+        error: error.response?.data?.message || 'Erro ao fazer upload da planilha.'
+      }));
+    }
   };
 
   const handleRemoveFile = () => {
