@@ -1,52 +1,27 @@
-/* Página de Advogados - Estilo Premium com base na imagem */
 .advogados-page {
-  padding: 32px;
-  background: var(--background-color);
-  min-height: 100vh;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
-.advogados-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-}
-
-.page-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.cadastrar-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
+.advogados-title {
+  font-size: 20px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  color: var(--text-primary);
+  margin: 0 0 24px 0;
 }
 
-.cadastrar-button:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-/* Filtros */
-.advogados-filters {
+.advogados-controls {
+  display: flex;
+  gap: 16px;
   margin-bottom: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .search-container {
   position: relative;
+  flex: 1;
   max-width: 400px;
 }
 
@@ -55,243 +30,251 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
 }
 
 .search-input {
   width: 100%;
-  padding: 12px 16px 12px 40px;
+  padding: 10px 12px 10px 40px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--card-background);
+  border-radius: 6px;
+  background: var(--background-secondary);
   color: var(--text-primary);
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .search-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .search-input::placeholder {
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
 }
 
-/* Cards de Estatísticas */
-.advogados-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 32px;
-}
-
-.stat-card {
+.filter-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 24px;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: var(--card-shadow);
-  transition: all 0.2s ease;
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.stat-number {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 8px;
-}
-
-.stat-label {
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 14px;
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-align: center;
-}
-
-/* Tabela Premium */
-.table-container {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--card-shadow);
-  margin-bottom: 24px;
-}
-
-.advogados-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card-background);
-}
-
-.advogados-table thead {
-  background: var(--hover-color);
-  border-bottom: 2px solid var(--border-color);
-}
-
-.advogados-table th {
-  padding: 20px 24px;
-  text-align: left;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.advogados-table tbody tr {
-  border-bottom: 1px solid var(--border-color);
-  transition: all 0.2s ease;
+  color: var(--text-primary);
   cursor: pointer;
 }
 
-.advogados-table tbody tr:hover {
-  background: var(--hover-color);
-  transform: scale(1.002);
+.filter-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
-.advogados-table tbody tr:last-child {
+.create-button {
+  padding: 10px 16px;
+  background: var(--button-background, var(--primary-color));
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  margin-left: auto; /* push to the far right */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.create-button:hover {
+  background: #3b82f6;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.advogados-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.advogado-card {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.advogado-card:last-child {
   border-bottom: none;
 }
 
-.advogados-table td {
-  padding: 20px 24px;
+.advogado-card:hover {
+  background: var(--hover-color);
+}
+
+.advogado-avatar {
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
   font-size: 14px;
-  color: var(--text-primary);
-  vertical-align: middle;
+  font-weight: 600;
+}
+
+.advogado-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.advogado-main-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.advogado-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
 .advogado-nome {
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
-  min-width: 200px;
 }
 
-.locais-container {
+.advogado-ufs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
 }
 
-.local-tag {
+.uf-item {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--primary-color);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+}
+
+.separator {
+  margin: 0 8px;
+  color: var(--text-tertiary);
 }
 
 .advogado-status {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 }
 
 .status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 12px;
   font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 500;
 }
 
 .status-badge.prioritario {
   background: rgba(239, 68, 68, 0.1);
   color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .status-badge.normal {
   background: rgba(34, 197, 94, 0.1);
   color: #16a34a;
-  border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-.advogado-audiencias {
-  text-align: center;
-  font-weight: 600;
-  color: var(--text-primary);
+.actions-container {
+  display: flex;
+  gap: 8px;
 }
 
-.advogado-actions {
-  text-align: center;
-  width: 60px;
-}
-
-.delete-button {
-  display: inline-flex;
+.action-button {
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
+  color: var(--text-tertiary);
+  transition: all 0.2s;
 }
 
-.delete-button:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.3);
-  transform: scale(1.1);
+.action-button:hover {
+  background: var(--hover-color);
 }
 
-/* Paginação Premium */
+.action-button.edit:hover {
+  color: var(--primary-color);
+}
+
+.action-button.delete:hover {
+  color: #dc2626;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  margin-top: 32px;
+  gap: 16px;
+  margin-top: 24px;
 }
 
 .pagination-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  padding: 0 12px;
-  background: var(--card-background);
-  color: var(--text-secondary);
+  padding: 8px 16px;
+  background: var(--background-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 14px;
-  font-weight: 500;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
 .pagination-button:hover:not(:disabled) {
   background: var(--hover-color);
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-}
-
-.pagination-button.active {
-  background: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
 }
 
 .pagination-button:disabled {
@@ -299,23 +282,49 @@
   cursor: not-allowed;
 }
 
-/* Estado Vazio */
-.empty-state {
-  text-align: center;
-  padding: 64px 32px;
+.pagination-info {
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
-.empty-state h3 {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
+.pagination-summary {
+  text-align: center;
+  margin-top: 16px;
 }
 
-.empty-state p {
-  margin: 0;
+.pagination-summary-text {
   font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Estilos adicionais */
+@media (max-width: 768px) {
+  .advogados-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .search-container {
+    max-width: 100%;
+  }
+  
+  .create-button {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .advogado-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .advogado-status {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
 }
 
 /* Responsive Design */

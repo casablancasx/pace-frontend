@@ -23,7 +23,7 @@ const EdicaoAvaliador: React.FC<EdicaoAvaliadorProps> = ({ avaliador, onVoltar, 
     nome: avaliador.nome,
     telefone: avaliador.telefone,
     email: avaliador.email,
-    sapiensId: avaliador.sapiensId.toString(),
+    sapiensId: avaliador.id.toString(),
     disponivel: avaliador.disponivel
   });
 

@@ -14,6 +14,7 @@ import ImportarPlanilha from './components/ImportarPlanilha';
 import Pautas from './pages/Pautas';
 import DetalhesPauta from './pages/Pautas/DetalhesPauta';
 import MinhasPautas from './pages/MinhasPautas';
+import { Advogados, CadastroAdvogado } from './pages/Advogados';
 import Login from './pages/Login/Login';
 import './App.css';
 
@@ -23,12 +24,7 @@ const AppContent: React.FC = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'advogados':
-        return (
-          <Layout>
-            <h1>Advogados</h1>
-            <p>Página de advogados será desenvolvida aqui.</p>
-          </Layout>
-        );
+        return <Advogados onCadastrarAdvogado={() => window.location.href = "/cadastro-advogado"} />;
       case 'pautas':
         return <Pautas />;
       case 'detalhes-pauta':
@@ -81,16 +77,29 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <AuthorizationProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/*" element={
-            <ProtectedRoute>
-              <NavigationProvider>
+        <NavigationProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/advogados" element={
+              <ProtectedRoute>
                 <AppContent />
-              </NavigationProvider>
-            </ProtectedRoute>
-          } />
-        </Routes>
+              </ProtectedRoute>
+            } />
+            <Route path="/cadastro-advogado" element={
+              <ProtectedRoute>
+                <div className="app">
+                  <Sidebar />
+                  <CadastroAdvogado />
+                </div>
+              </ProtectedRoute>
+            } />
+            <Route path="/*" element={
+              <ProtectedRoute>
+                <AppContent />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </NavigationProvider>
       </AuthorizationProvider>
     </ThemeProvider>
   );
