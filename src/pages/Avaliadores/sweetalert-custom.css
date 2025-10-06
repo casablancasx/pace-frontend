@@ -1,0 +1,88 @@
+/* Customizações do SweetAlert2 para o tema da aplicação */
+.swal2-popup {
+  border-radius: 12px;
+  padding: 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.swal2-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+}
+
+.swal2-html-container {
+  font-size: 14px;
+  color: var(--text-secondary, #4b5563);
+}
+
+.swal2-confirm {
+  background-color: var(--primary-color, #3b82f6) !important;
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.swal2-confirm:hover {
+  background-color: var(--primary-hover, #2563eb) !important;
+}
+
+.swal2-cancel {
+  background-color: var(--background-secondary, #f3f4f6) !important;
+  color: var(--text-primary, #111827) !important;
+  border: 1px solid var(--border-color, #d1d5db) !important;
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.swal2-cancel:hover {
+  background-color: var(--hover-color, #e5e7eb) !important;
+}
+
+.swal2-icon {
+  border-color: var(--primary-color, #3b82f6) !important;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: #facc15 !important;
+  color: #facc15 !important;
+}
+
+.swal2-icon.swal2-error {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #22c55e !important;
+  color: #22c55e !important;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .swal2-popup {
+  background-color: var(--card-background, #1f2937);
+  color: var(--text-primary, #f9fafb);
+}
+
+[data-theme="dark"] .swal2-title {
+  color: var(--text-primary, #f9fafb);
+}
+
+[data-theme="dark"] .swal2-html-container {
+  color: var(--text-secondary, #d1d5db);
+}
+
+[data-theme="dark"] .swal2-cancel {
+  background-color: var(--background-secondary, #374151) !important;
+  color: var(--text-primary, #f9fafb) !important;
+  border-color: var(--border-color, #4b5563) !important;
+}
+
+[data-theme="dark"] .swal2-cancel:hover {
+  background-color: var(--hover-color, #4b5563) !important;
+}

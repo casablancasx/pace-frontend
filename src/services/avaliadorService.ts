@@ -22,13 +22,13 @@ export interface AvaliadorRequestDTO {
 }
 
 export interface AvaliadorResponseDTO {
-  avaliadorId: number;
+  id: number;
   nome: string;
   email: string;
   telefone: string;
   setor: string;
   unidade: string;
-  sapiensId: number;
+  sapiensId?: number;
   quantidadeAudiencias: number;
   quantidadePautas: number;
   score: number;
@@ -143,6 +143,9 @@ class AvaliadorService {
    * @returns Promise void
    */
   async deletarAvaliador(id: number): Promise<void> {
+    if (!id) {
+      throw new Error('ID do avaliador não fornecido ou inválido.');
+    }
     try {
       await api.delete(`/avaliador/${id}`);
     } catch (error: any) {

@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Edit, Trash2 } from 'lucide-react';
+import Swal from 'sweetalert2';
 import Layout from '../../components/Layout';
 import CadastroAvaliador from './CadastroAvaliador';
 import EdicaoAvaliador from './EdicaoAvaliador';
 import DetalhesAvaliador from './DetalhesAvaliador';
 import avaliadorService from '../../services/avaliadorService';
-import type { PageResponse } from '../../services/avaliadorService';
+import type { PageResponse, AvaliadorResponseDTO } from '../../services/avaliadorService';
 import './avaliador.css';
+import './sweetalert-custom.css';
 
-export interface AvaliadorData {
-  avaliadorId: number;
-  nome: string;
-  telefone: string;
-  email: string;
-  setor: string;
-  unidade: string;
-  sapiensId: number;
-  quantidadeAudiencias: number;
-  quantidadePautas: number;
-  score: number;
-  disponivel: boolean;
-  adicionadoPor: string;
-}
+export type AvaliadorData = AvaliadorResponseDTO;
 
 const Avaliador: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,9 +65,57 @@ const Avaliador: React.FC = () => {
     setShowEdicao(true);
   };
 
-  const handleExcluirAvaliador = (_avaliadorId: number) => {
-    // TODO: Implementar método de exclusão no serviço
-    alert('Funcionalidade de exclusão ainda não implementada');
+  const handleExcluirAvaliador = (avaliadorId: number) => {
+    // Verificar se o ID é válido
+    if (!avaliadorId) {
+      Swal.fire({
+        title: 'Erro!',
+        text: 'ID do avaliador não encontrado.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6'
+      });
+      return;
+    }
+    
+    Swal.fire({
+      title: 'Confirmação',
+      text: 'Tem certeza que deseja excluir este avaliador?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, excluir',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          setLoading(true);
+          console.log(`Enviando requisição para excluir avaliador ID: ${avaliadorId}`);
+          await avaliadorService.deletarAvaliador(avaliadorId);
+          
+          Swal.fire({
+            title: 'Excluído!',
+            text: 'O avaliador foi excluído com sucesso.',
+            icon: 'success',
+            confirmButtonColor: '#3085d6'
+          });
+          
+          // Recarregar a lista de avaliadores
+          carregarAvaliadores();
+        } catch (error) {
+          console.error('Erro ao excluir avaliador:', error);
+          Swal.fire({
+            title: 'Erro!',
+            text: 'Não foi possível excluir o avaliador.',
+            icon: 'error',
+            confirmButtonColor: '#3085d6'
+          });
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
   };
 
   const handleVerDetalhes = (avaliador: AvaliadorData) => {
@@ -182,7 +219,7 @@ const Avaliador: React.FC = () => {
         {!loading && !error && pageResponse.content.length > 0 && (
           <div className="avaliadores-list">
             {pageResponse.content.map((avaliador: AvaliadorData) => (
-            <div key={avaliador.avaliadorId} className="avaliador-card" onClick={() => handleVerDetalhes(avaliador)}>
+            <div key={avaliador.id} className="avaliador-card" onClick={() => handleVerDetalhes(avaliador)}>
               <div className="avaliador-avatar">
                 <div className="avatar-placeholder">
                   {avaliador.nome.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()}
@@ -191,11 +228,10 @@ const Avaliador: React.FC = () => {
               
               <div className="avaliador-content">
                 <div className="avaliador-main-info">
-                  <h3 className="avaliador-nome">{avaliador.nome}</h3>
                   <div className="avaliador-details">
-                    <span className="avaliador-setor">{avaliador.setor}</span>
+                    <span className="avaliador-setor">{avaliador.nome}</span>
                     <span className="separator">•</span>
-                    <span className="avaliador-unidade">{avaliador.unidade}</span>
+                    <span className="avaliador-unidade">{avaliador.setor}</span>
                   </div>
                   <div className="avaliador-stats">
                     <span className="stat-item">{avaliador.quantidadeAudiencias} audiências</span>
@@ -224,7 +260,18 @@ const Avaliador: React.FC = () => {
                     className="action-button delete"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleExcluirAvaliador(avaliador.avaliadorId);
+                      // Verificar e registrar o valor do ID antes de chamar a função
+                      console.log('ID do avaliador a ser excluído:', avaliador?.id);
+                      if (avaliador && typeof avaliador.id === 'number') {
+                        handleExcluirAvaliador(avaliador.id);
+                      } else {
+                        console.error('ID do avaliador inválido:', avaliador?.id);
+                        Swal.fire({
+                          title: 'Erro!',
+                          text: 'ID do avaliador não encontrado.',
+                          icon: 'error'
+                        });
+                      }
                     }}
                     title="Excluir avaliador"
                   >
