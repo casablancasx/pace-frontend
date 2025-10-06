@@ -240,6 +240,62 @@
   color: var(--text-secondary);
 }
 
+/* SweetAlert2 custom styles for popup de sucesso */
+.avaliador-success-popup {
+  border-radius: 20px !important;
+  padding: 32px 24px !important;
+  background: var(--card-background, #ffffff) !important;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.16) !important;
+}
+
+.avaliador-success-title {
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 12px !important;
+}
+
+.avaliador-success-text {
+  font-size: 16px !important;
+  color: var(--text-secondary) !important;
+  margin-bottom: 24px !important;
+}
+
+.avaliador-success-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: var(--button-background, var(--primary-color, #16a34a)) !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.25) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.avaliador-success-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(16, 185, 129, 0.3) !important;
+}
+
+.avaliador-success-icon {
+  border-color: rgba(16, 185, 129, 0.2) !important;
+  color: var(--primary-color, #16a34a) !important;
+}
+
+[data-theme="dark"] .avaliador-success-popup {
+  background: var(--card-background, #0f172a) !important;
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.7) !important;
+}
+
+[data-theme="dark"] .avaliador-success-text {
+  color: var(--text-secondary) !important;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .cadastro-avaliador-page {

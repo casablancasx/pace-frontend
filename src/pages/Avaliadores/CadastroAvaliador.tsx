@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import Layout from '../../components/Layout';
 import ColaboradorAutocomplete from '../../components/Avaliadores/ColaboradorAutocomplete';
 import avaliadorService from '../../services/avaliadorService';
@@ -117,22 +119,38 @@ const CadastroAvaliador: React.FC<CadastroAvaliadorProps> = ({ onVoltar }) => {
     setSuccess(false);
 
     try {
-      await avaliadorService.cadastrarAvaliador({
+      const response = await avaliadorService.cadastrarAvaliador({
         nome: form.nome,
         email: form.email,
-        telefone: form.telefone,
+        telefone: form.telefone.trim() === '' ? null : form.telefone,
         disponivel: true,
         sapiensId: form.sapiensId,
         setor: form.setor,
         unidade: form.unidade
       });
 
-      setSuccess(true);
-      
-      // Limpar formulário após 2 segundos e voltar
-      setTimeout(() => {
+      if (response.status === 201) {
+        setSuccess(true);
+        await Swal.fire({
+          title: 'Avaliador cadastrado!',
+          text: 'O cadastro foi concluído com sucesso.',
+          icon: 'success',
+          confirmButtonText: 'Voltar para a lista',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'avaliador-success-popup',
+            title: 'avaliador-success-title',
+            htmlContainer: 'avaliador-success-text',
+            confirmButton: 'avaliador-success-button',
+            icon: 'avaliador-success-icon'
+          }
+        });
         onVoltar();
-      }, 2000);
+        return;
+      }
+
+      setSuccess(true);
+      onVoltar();
     } catch (err: any) {
       setError(err.message || 'Erro ao cadastrar avaliador. Tente novamente.');
     } finally {

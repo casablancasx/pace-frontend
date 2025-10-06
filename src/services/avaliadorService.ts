@@ -1,3 +1,4 @@
+import type { AxiosResponse } from 'axios';
 import api from './api';
 
 export interface SetoRequestDTO {
@@ -13,7 +14,7 @@ export interface UnidadeRequestDTO {
 export interface AvaliadorRequestDTO {
   nome: string;
   email: string;
-  telefone: string;
+  telefone: string | null;
   disponivel: boolean;
   sapiensId: number;
   setor: SetoRequestDTO;
@@ -49,10 +50,10 @@ class AvaliadorService {
    * @param avaliador - Dados do avaliador a ser cadastrado
    * @returns Promise com os dados do avaliador cadastrado
    */
-  async cadastrarAvaliador(avaliador: AvaliadorRequestDTO): Promise<AvaliadorResponseDTO> {
+  async cadastrarAvaliador(avaliador: AvaliadorRequestDTO): Promise<AxiosResponse<AvaliadorResponseDTO>> {
     try {
       const response = await api.post<AvaliadorResponseDTO>('/avaliador', avaliador);
-      return response.data;
+      return response;
     } catch (error: any) {
       console.error('Erro ao cadastrar avaliador:', error);
       
