@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, MapPin, Trash2, Loader } from 'lucide-react';
+import { Search, Plus, MapPin, Trash2 } from 'lucide-react';
 import Layout from '../../components/Layout';
 import './advogados.css';
 import advogadoService from '../../services/advogadoService';
@@ -202,13 +202,12 @@ const Advogados: React.FC<AdvogadosProps> = ({ onCadastrarAdvogado, onViewAdvoga
                       <span className="advogado-nome">{advogado.nome}</span>
                     </div>
                     <div className="advogado-ufs">
-                      {advogado.ufs?.map((uf, index) => (
-                        <span key={index} className="uf-item">
-                          <MapPin size={12} />
-                          {uf}
-                          {index < (advogado.ufs?.length || 0) - 1 && ', '}
-                        </span>
-                      ))}
+                      <span className="uf-label">
+                        <MapPin size={12} />
+                      </span>
+                      <span className="uf-list">
+                        {advogado.ufs?.join(', ')}
+                      </span>
                     </div>
                   </div>
                 </div>

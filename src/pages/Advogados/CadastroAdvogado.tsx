@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useNavigation } from '../../contexts/NavigationContext';
 import Layout from '../../components/Layout';
 import './cadastroAdvogado.css';
 import advogadoService, { Uf } from '../../services/advogadoService';
@@ -50,6 +51,7 @@ interface CadastroAdvogadoForm {
 
 const CadastroAdvogado: React.FC = () => {
   const navigate = useNavigate();
+  const { setCurrentPage } = useNavigation();
   const [form, setForm] = useState<CadastroAdvogadoForm>({
     nome: '',
     ufs: []
@@ -125,7 +127,7 @@ const CadastroAdvogado: React.FC = () => {
           title: 'Advogado cadastrado!',
           text: `O advogado ${form.nome} foi cadastrado com sucesso como prioritário.`,
           icon: 'success',
-          confirmButtonText: 'Voltar para lista',
+          confirmButtonText: 'OK',
           buttonsStyling: false,
           customClass: {
             popup: 'avaliador-success-popup',
@@ -135,6 +137,8 @@ const CadastroAdvogado: React.FC = () => {
             icon: 'avaliador-success-icon'
           }
         });
+        // Navegar para a página de advogados usando o contexto
+        setCurrentPage('advogados');
         navigate('/advogados');
         return;
       }
