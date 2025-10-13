@@ -3,27 +3,9 @@ import { ArrowLeft, Plus, Clock, User, AlertCircle } from 'lucide-react';
 import Layout from '../../components/Layout';
 import AdicionarAnaliseModal from './AdicionarAnaliseModal';
 import { useNavigation } from '../../contexts/NavigationContext';
+import pautaService from '../../services/pautaService';
+import type { PautaResponseDTO, AudienciaResponseDTO } from '../../services/pautaService';
 import './detalhesPauta.css';
-
-export interface AudienciaResponseDTO {
-  numeroProcesso: string;
-  hora: string;
-  nomeParte: string;
-  advogados: string[];
-  assunto: string;
-  classeJudicial: string;
-  prioridade: string;
-  analise: string;
-}
-
-export interface PautaResponseDTO {
-  pautaId: number;
-  data: string;
-  orgaoJulgador: string;
-  turno: string;
-  respostaAnalise: string;
-  audiencias: AudienciaResponseDTO[];
-}
 
 interface DetalhesPautaProps {
   pautaId: string;
@@ -32,48 +14,8 @@ interface DetalhesPautaProps {
 const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
   const { navigateBackToPautas } = useNavigation();
   
-  // Mock data - Em uma aplicação real, buscaríamos por ID
-  const getMockPauta = (id: string): PautaResponseDTO => ({
-    pautaId: parseInt(id) || 1,
-    data: '2024-01-15',
-    orgaoJulgador: 'Segunda Turma Recursal',
-    turno: 'Manhã',
-    respostaAnalise: 'PENDENTE',
-    audiencias: [
-      {
-        numeroProcesso: '1234567-89.2023.5.03.0001',
-        hora: '09:00',
-        nomeParte: 'MARIA SILVA',
-        advogados: ['Dr. João Santos'],
-        assunto: 'Horas extras e adicional noturno',
-        classeJudicial: 'Reclamação Trabalhista',
-        prioridade: 'normal',
-        analise: 'Audiência de conciliação com boas chances de acordo'
-      },
-      {
-        numeroProcesso: '9876543-21.2023.5.03.0002',
-        hora: '10:30',
-        nomeParte: 'PEDRO OLIVEIRA',
-        advogados: ['Dra. Ana Costa'],
-        assunto: 'Verbas rescisórias',
-        classeJudicial: 'Reclamação Trabalhista',
-        prioridade: 'urgente',
-        analise: 'Caso complexo - preparar argumentos sobre horas extras'
-      },
-      {
-        numeroProcesso: '5555444-33.2023.5.03.0003',
-        hora: '14:00',
-        nomeParte: 'CARLOS MENDES',
-        advogados: ['Dr. Roberto Lima'],
-        assunto: 'Acidente de trabalho',
-        classeJudicial: 'Reclamação Trabalhista',
-        prioridade: 'normal',
-        analise: ''
-      }
-    ]
-  });
-
-  const [pautaAtual, setPautaAtual] = useState<PautaResponseDTO>(getMockPauta(pautaId));
+  const [pautaAtual, setPautaAtual] = useState<PautaResponseDTO | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [modalAnalise, setModalAnalise] = useState<{
     isOpen: boolean;
@@ -82,6 +24,23 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
     isOpen: false,
     audiencia: null
   });
+
+  // Carregar detalhes da pauta
+  useEffect(() => {
+    const carregarPauta = async () => {
+      setIsLoading(true);
+      try {
+        const data = await pautaService.buscarPautaPorId(Number(pautaId));
+        setPautaAtual(data);
+      } catch (error) {
+        console.error('Erro ao carregar detalhes da pauta:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    carregarPauta();
+  }, [pautaId]);
   
 
 
@@ -95,7 +54,9 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
   };
 
   const handleSaveAnalise = (numeroProcesso: string, novaAnalise: string) => {
-    const pautaAtualizada = {
+    if (!pautaAtual) return;
+    
+    const pautaAtualizada: PautaResponseDTO = {
       ...pautaAtual,
       audiencias: pautaAtual.audiencias.map(aud => 
         aud.numeroProcesso === numeroProcesso 
@@ -118,6 +79,30 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
       audiencia: null
     });
   };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="detalhes-pauta-page">
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            Carregando...
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!pautaAtual) {
+    return (
+      <Layout>
+        <div className="detalhes-pauta-page">
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            Pauta não encontrada.
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -146,16 +131,17 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
               <span className="info-value">{pautaAtual.orgaoJulgador}</span>
             </div>
             <div className="info-item">
-              <span className="info-label">Resposta Análise</span>
+              <span className="info-label">Análise Comparecimento</span>
               <select 
                 className={`resposta-select ${
-                  pautaAtual.respostaAnalise === 'COMPARECER' ? 'comparecer' :
-                  pautaAtual.respostaAnalise === 'NÃO COMPARECER' ? 'nao-comparecer' : 'pendente'
+                  pautaAtual.analiseComparecimento === 'COMPARECER' ? 'comparecer' :
+                  pautaAtual.analiseComparecimento === 'NÃO COMPARECER' ? 'nao-comparecer' : 'pendente'
                 }`}
-                value={pautaAtual.respostaAnalise}
+                value={pautaAtual.analiseComparecimento}
                 onChange={(e) => {
                   const novaResposta = e.target.value;
-                  setPautaAtual(prev => ({ ...prev, respostaAnalise: novaResposta }));
+                  if (!pautaAtual) return;
+                  setPautaAtual({ ...pautaAtual, analiseComparecimento: novaResposta });
                 }}
               >
                 <option value="PENDENTE">PENDENTE</option>
@@ -203,9 +189,9 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
                     <td>{audiencia.assunto}</td>
                     <td>{audiencia.classeJudicial}</td>
                     <td>
-                      <span className={`prioridade-badge ${audiencia.prioridade.toLowerCase()}`}>
-                        {audiencia.prioridade === 'Urgente' && <AlertCircle size={12} />}
-                        {audiencia.prioridade}
+                      <span className={`prioridade-badge ${audiencia.isPrioritaria ? 'urgente' : 'normal'}`}>
+                        {audiencia.isPrioritaria && <AlertCircle size={12} />}
+                        {audiencia.isPrioritaria ? 'Prioritária' : 'Normal'}
                       </span>
                     </td>
                     <td className="analise-cell">

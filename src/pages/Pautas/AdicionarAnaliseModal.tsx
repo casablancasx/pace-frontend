@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 import { X, Save } from 'lucide-react';
+import type { AudienciaResponseDTO } from '../../services/pautaService';
 import './AdicionarAnaliseModal.css';
-
-interface AudienciaResponseDTO {
-  numeroProcesso: string;
-  hora: string;
-  nomeParte: string;
-  advogados: string[];
-  assunto: string;
-  classeJudicial: string;
-  prioridade: string;
-  analise: string;
-}
 
 interface AdicionarAnaliseModalProps {
   audiencia: AudienciaResponseDTO;
