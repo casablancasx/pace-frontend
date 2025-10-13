@@ -30,9 +30,8 @@ export interface PageResponse<T> {
 }
 
 export interface OrgaoJulgadorResponse {
-  id: number;
+  orgaoJulgadorId: number;
   nome: string;
-  uf: string;
 }
 
 export interface SalaResponse {
@@ -130,18 +129,16 @@ class PautaService {
   }
 
   /**
-   * Busca órgãos julgadores por UF e nome
-   * @param uf - UF do órgão julgador
-   * @param nome - Nome parcial do órgão julgador
+   * Busca órgãos julgadores por UF
+   * @param ufId - ID da UF
    * @returns Promise com lista de órgãos julgadores
    */
-  async listarOrgaosJulgadores(
-    uf: string,
-    nome: string
+  async listarOrgaosJulgadoresPorUf(
+    ufId: number
   ): Promise<OrgaoJulgadorResponse[]> {
     try {
       const response = await api.get<OrgaoJulgadorResponse[]>('/orgao-julgador', {
-        params: { uf, nome }
+        params: { ufId }
       });
       return response.data;
     } catch (error: any) {

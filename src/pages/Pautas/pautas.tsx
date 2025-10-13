@@ -3,9 +3,8 @@ import { Search } from 'lucide-react';
 import Layout from '../../components/Layout';
 import { useNavigation } from '../../contexts/NavigationContext';
 import AdicionarAnaliseModal from './AdicionarAnaliseModal';
-import OrgaoJulgadorAutocomplete from '../../components/OrgaoJulgadorAutocomplete';
 import pautaService from '../../services/pautaService';
-import type { PautaResponseDTO, AudienciaResponseDTO, SalaResponse, UfResponse } from '../../services/pautaService';
+import type { PautaResponseDTO, AudienciaResponseDTO, SalaResponse, UfResponse, OrgaoJulgadorResponse } from '../../services/pautaService';
 import './pautas.css';
 
 interface PautasProps {}
@@ -23,6 +22,8 @@ const Pautas: React.FC<PautasProps> = () => {
   const [ufs, setUfs] = useState<UfResponse[]>([]);
   const [loadingUfs, setLoadingUfs] = useState(false);
   const [ufId, setUfId] = useState<number | null>(null);
+  const [orgaosJulgadores, setOrgaosJulgadores] = useState<OrgaoJulgadorResponse[]>([]);
+  const [loadingOrgaosJulgadores, setLoadingOrgaosJulgadores] = useState(false);
   const [modalAnalise, setModalAnalise] = useState<{
     isOpen: boolean;
     audiencia: AudienciaResponseDTO | null;
@@ -90,6 +91,32 @@ const Pautas: React.FC<PautasProps> = () => {
 
     carregarUfs();
   }, []);
+
+  // Carrega órgãos julgadores quando a UF mudar
+  useEffect(() => {
+    const carregarOrgaosJulgadores = async () => {
+      if (!ufId) {
+        setOrgaosJulgadores([]);
+        setOrgaoJulgadorId(null);
+        return;
+      }
+
+      setLoadingOrgaosJulgadores(true);
+      console.log('Carregando órgãos julgadores para ufId:', ufId);
+      try {
+        const response = await pautaService.listarOrgaosJulgadoresPorUf(ufId);
+        console.log('Órgãos julgadores carregados:', response);
+        setOrgaosJulgadores(response);
+      } catch (error) {
+        console.error('Erro ao carregar órgãos julgadores:', error);
+        setOrgaosJulgadores([]);
+      } finally {
+        setLoadingOrgaosJulgadores(false);
+      }
+    };
+
+    carregarOrgaosJulgadores();
+  }, [ufId]);
 
   // Carrega salas quando o órgão julgador mudar
   useEffect(() => {
@@ -282,20 +309,35 @@ const Pautas: React.FC<PautasProps> = () => {
               ))}
             </select>
 
-            <OrgaoJulgadorAutocomplete
-              value={filtros.orgaoJulgador}
-              uf={filtros.uf}
-              onChange={(value) => handleFilterChange('orgaoJulgador', value)}
-              onSelect={(orgao) => {
-                console.log('Órgão julgador selecionado:', orgao);
-                setOrgaoJulgadorId(orgao.id);
-                // Limpa a sala quando trocar de órgão julgador
+            <select
+              value={orgaoJulgadorId || ''}
+              onChange={(e) => {
+                const selectedOrgaoId = e.target.value ? Number(e.target.value) : null;
+                setOrgaoJulgadorId(selectedOrgaoId);
+                // Atualiza o nome do órgão julgador no filtro para exibição
+                const orgaoSelecionado = orgaosJulgadores.find(o => o.orgaoJulgadorId === selectedOrgaoId);
+                handleFilterChange('orgaoJulgador', orgaoSelecionado?.nome || '');
+                // Limpa sala ao mudar órgão julgador
                 setSalaId(null);
-                handleFilterChange('sala', '');
+                setCurrentPage(0);
               }}
-              placeholder="Digite o nome do órgão julgador"
-              minLength={3}
-            />
+              className="filter-select"
+              disabled={!ufId || loadingOrgaosJulgadores}
+            >
+              <option value="">
+                {loadingOrgaosJulgadores ? 'Carregando órgãos...' : 
+                 !ufId ? 'Selecione a UF' : 
+                 orgaosJulgadores.length === 0 ? 'Nenhum órgão disponível' :
+                 'Órgão Julgador'}
+              </option>
+              {orgaosJulgadores.map((orgao) => (
+                <option key={orgao.orgaoJulgadorId} value={orgao.orgaoJulgadorId}>
+                  {orgao.nome}
+                </option>
+              ))}
+            </select>
+
+        
 
             <select
               value={salaId || ''}
