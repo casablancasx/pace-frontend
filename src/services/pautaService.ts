@@ -29,6 +29,12 @@ export interface PageResponse<T> {
   totalPages: number;
 }
 
+export interface OrgaoJulgadorResponse {
+  id: number;
+  nome: string;
+  uf: string;
+}
+
 export interface ListarPautasParams {
   page: number;
   size: number;
@@ -110,6 +116,27 @@ class PautaService {
     } catch (error: any) {
       console.error('Erro ao atualizar análise:', error);
       throw new Error('Erro ao atualizar análise da audiência.');
+    }
+  }
+
+  /**
+   * Busca órgãos julgadores por UF e nome
+   * @param uf - UF do órgão julgador
+   * @param nome - Nome parcial do órgão julgador
+   * @returns Promise com lista de órgãos julgadores
+   */
+  async listarOrgaosJulgadores(
+    uf: string,
+    nome: string
+  ): Promise<OrgaoJulgadorResponse[]> {
+    try {
+      const response = await api.get<OrgaoJulgadorResponse[]>('/orgao-julgador', {
+        params: { uf, nome }
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao buscar órgãos julgadores:', error);
+      throw new Error('Erro ao buscar órgãos julgadores.');
     }
   }
 }

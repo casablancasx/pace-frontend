@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import Layout from '../../components/Layout';
 import { useNavigation } from '../../contexts/NavigationContext';
 import AdicionarAnaliseModal from './AdicionarAnaliseModal';
+import OrgaoJulgadorAutocomplete from '../../components/OrgaoJulgadorAutocomplete';
 import pautaService from '../../services/pautaService';
 import type { PautaResponseDTO, AudienciaResponseDTO } from '../../services/pautaService';
 import './pautas.css';
@@ -240,12 +241,12 @@ const Pautas: React.FC<PautasProps> = () => {
               <option value="TO">Tocantins - TO</option>
             </select>
 
-            <input
-              type="text"
-              placeholder="Órgão Julgador"
+            <OrgaoJulgadorAutocomplete
               value={filtros.orgaoJulgador}
-              onChange={(e) => handleFilterChange('orgaoJulgador', e.target.value)}
-              className="filter-input"
+              uf={filtros.uf}
+              onChange={(value) => handleFilterChange('orgaoJulgador', value)}
+              placeholder="Digite o nome do órgão julgador"
+              minLength={3}
             />
 
             <input
