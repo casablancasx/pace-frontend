@@ -35,13 +35,23 @@ export interface OrgaoJulgadorResponse {
   uf: string;
 }
 
+export interface SalaResponse {
+  salaId: number;
+  sala: string;
+}
+
+export interface UfResponse {
+  ufId: number;
+  sigla: string;
+}
+
 export interface ListarPautasParams {
   page: number;
   size: number;
   resultadoAnalise?: string;
-  uf?: string;
-  orgaoJulgador?: string;
-  sala?: string;
+  ufId?: number;
+  orgaoJulgadorId?: number;
+  salaId?: number;
 }
 
 class PautaService {
@@ -61,17 +71,17 @@ class PautaService {
       if (params.resultadoAnalise) {
         queryParams.resultadoAnalise = params.resultadoAnalise;
       }
-      if (params.uf) {
-        queryParams.uf = params.uf;
+      if (params.ufId) {
+        queryParams.ufId = params.ufId;
       }
-      if (params.orgaoJulgador) {
-        queryParams.orgaoJulgador = params.orgaoJulgador;
+      if (params.orgaoJulgadorId) {
+        queryParams.orgaoJulgadorId = params.orgaoJulgadorId;
       }
-      if (params.sala) {
-        queryParams.sala = params.sala;
+      if (params.salaId) {
+        queryParams.salaId = params.salaId;
       }
 
-      const response = await api.get<PageResponse<PautaResponseDTO>>('/pautas', {
+      const response = await api.get<PageResponse<PautaResponseDTO>>('/pauta', {
         params: queryParams
       });
 
@@ -137,6 +147,37 @@ class PautaService {
     } catch (error: any) {
       console.error('Erro ao buscar órgãos julgadores:', error);
       throw new Error('Erro ao buscar órgãos julgadores.');
+    }
+  }
+
+  /**
+   * Busca salas por órgão julgador
+   * @param orgaoJulgadorId - ID do órgão julgador
+   * @returns Promise com lista de salas
+   */
+  async listarSalasPorOrgaoJulgador(
+    orgaoJulgadorId: number
+  ): Promise<SalaResponse[]> {
+    try {
+      const response = await api.get<SalaResponse[]>(`/sala/${orgaoJulgadorId}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao buscar salas:', error);
+      throw new Error('Erro ao buscar salas.');
+    }
+  }
+
+  /**
+   * Lista todas as UFs disponíveis
+   * @returns Promise com lista de UFs
+   */
+  async listarUfs(): Promise<UfResponse[]> {
+    try {
+      const response = await api.get<UfResponse[]>('/uf');
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao buscar UFs:', error);
+      throw new Error('Erro ao buscar UFs.');
     }
   }
 }

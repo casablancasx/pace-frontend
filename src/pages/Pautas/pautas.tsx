@@ -5,7 +5,7 @@ import { useNavigation } from '../../contexts/NavigationContext';
 import AdicionarAnaliseModal from './AdicionarAnaliseModal';
 import OrgaoJulgadorAutocomplete from '../../components/OrgaoJulgadorAutocomplete';
 import pautaService from '../../services/pautaService';
-import type { PautaResponseDTO, AudienciaResponseDTO } from '../../services/pautaService';
+import type { PautaResponseDTO, AudienciaResponseDTO, SalaResponse, UfResponse } from '../../services/pautaService';
 import './pautas.css';
 
 interface PautasProps {}
@@ -16,6 +16,13 @@ const Pautas: React.FC<PautasProps> = () => {
   const [itemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [orgaoJulgadorId, setOrgaoJulgadorId] = useState<number | null>(null);
+  const [salaId, setSalaId] = useState<number | null>(null);
+  const [salas, setSalas] = useState<SalaResponse[]>([]);
+  const [loadingSalas, setLoadingSalas] = useState(false);
+  const [ufs, setUfs] = useState<UfResponse[]>([]);
+  const [loadingUfs, setLoadingUfs] = useState(false);
+  const [ufId, setUfId] = useState<number | null>(null);
   const [modalAnalise, setModalAnalise] = useState<{
     isOpen: boolean;
     audiencia: AudienciaResponseDTO | null;
@@ -46,9 +53,9 @@ const Pautas: React.FC<PautasProps> = () => {
         page: currentPage,
         size: itemsPerPage,
         resultadoAnalise: filtros.resultadoAnalise || undefined,
-        uf: filtros.uf || undefined,
-        orgaoJulgador: filtros.orgaoJulgador || undefined,
-        sala: filtros.sala || undefined,
+        ufId: ufId || undefined,
+        orgaoJulgadorId: orgaoJulgadorId || undefined,
+        salaId: salaId || undefined,
       });
 
       setPautas(response.content);
@@ -64,7 +71,51 @@ const Pautas: React.FC<PautasProps> = () => {
   // Carrega pautas quando a página ou filtros mudam
   useEffect(() => {
     carregarPautas();
-  }, [currentPage, itemsPerPage, filtros.resultadoAnalise, filtros.uf, filtros.orgaoJulgador, filtros.sala]);
+  }, [currentPage, itemsPerPage, filtros.resultadoAnalise, ufId, orgaoJulgadorId, salaId]);
+
+  // Carrega UFs disponíveis na inicialização
+  useEffect(() => {
+    const carregarUfs = async () => {
+      setLoadingUfs(true);
+      try {
+        const response = await pautaService.listarUfs();
+        setUfs(response);
+      } catch (error) {
+        console.error('Erro ao carregar UFs:', error);
+        setUfs([]);
+      } finally {
+        setLoadingUfs(false);
+      }
+    };
+
+    carregarUfs();
+  }, []);
+
+  // Carrega salas quando o órgão julgador mudar
+  useEffect(() => {
+    const carregarSalas = async () => {
+      if (!orgaoJulgadorId) {
+        setSalas([]);
+        setSalaId(null);
+        return;
+      }
+
+      setLoadingSalas(true);
+      console.log('Carregando salas para orgaoJulgadorId:', orgaoJulgadorId);
+      try {
+        const response = await pautaService.listarSalasPorOrgaoJulgador(orgaoJulgadorId);
+        console.log('Salas carregadas:', response);
+        setSalas(response);
+      } catch (error) {
+        console.error('Erro ao carregar salas:', error);
+        setSalas([]);
+      } finally {
+        setLoadingSalas(false);
+      }
+    };
+
+    carregarSalas();
+  }, [orgaoJulgadorId]);
 
   // Filtro local para busca de texto (search term)
   const filteredPautas = useMemo(() => {
@@ -207,55 +258,69 @@ const Pautas: React.FC<PautasProps> = () => {
             </select>
 
             <select
-              value={filtros.uf}
-              onChange={(e) => handleFilterChange('uf', e.target.value)}
+              value={ufId || ''}
+              onChange={(e) => {
+                const selectedUfId = e.target.value ? Number(e.target.value) : null;
+                setUfId(selectedUfId);
+                // Encontra a sigla da UF selecionada
+                const selectedUf = ufs.find(uf => uf.ufId === selectedUfId);
+                handleFilterChange('uf', selectedUf?.sigla || '');
+                // Limpa órgão julgador e sala ao mudar UF
+                setOrgaoJulgadorId(null);
+                setSalaId(null);
+                handleFilterChange('orgaoJulgador', '');
+                setCurrentPage(0);
+              }}
               className="filter-select"
+              disabled={loadingUfs}
             >
-              <option value="">UF</option>
-              <option value="AC">Acre - AC</option>
-              <option value="AL">Alagoas - AL</option>
-              <option value="AP">Amapá - AP</option>
-              <option value="AM">Amazonas - AM</option>
-              <option value="BA">Bahia - BA</option>
-              <option value="CE">Ceará - CE</option>
-              <option value="DF">Distrito Federal - DF</option>
-              <option value="ES">Espírito Santo - ES</option>
-              <option value="GO">Goiás - GO</option>
-              <option value="MA">Maranhão - MA</option>
-              <option value="MT">Mato Grosso - MT</option>
-              <option value="MS">Mato Grosso do Sul - MS</option>
-              <option value="MG">Minas Gerais - MG</option>
-              <option value="PA">Pará - PA</option>
-              <option value="PB">Paraíba - PB</option>
-              <option value="PR">Paraná - PR</option>
-              <option value="PE">Pernambuco - PE</option>
-              <option value="PI">Piauí - PI</option>
-              <option value="RJ">Rio de Janeiro - RJ</option>
-              <option value="RN">Rio Grande do Norte - RN</option>
-              <option value="RS">Rio Grande do Sul - RS</option>
-              <option value="RO">Rondônia - RO</option>
-              <option value="RR">Roraima - RR</option>
-              <option value="SC">Santa Catarina - SC</option>
-              <option value="SP">São Paulo - SP</option>
-              <option value="SE">Sergipe - SE</option>
-              <option value="TO">Tocantins - TO</option>
+              <option value="">{loadingUfs ? 'Carregando...' : 'UF'}</option>
+              {ufs.map((uf) => (
+                <option key={uf.ufId} value={uf.ufId}>
+                  {uf.sigla}
+                </option>
+              ))}
             </select>
 
             <OrgaoJulgadorAutocomplete
               value={filtros.orgaoJulgador}
               uf={filtros.uf}
               onChange={(value) => handleFilterChange('orgaoJulgador', value)}
+              onSelect={(orgao) => {
+                console.log('Órgão julgador selecionado:', orgao);
+                setOrgaoJulgadorId(orgao.id);
+                // Limpa a sala quando trocar de órgão julgador
+                setSalaId(null);
+                handleFilterChange('sala', '');
+              }}
               placeholder="Digite o nome do órgão julgador"
               minLength={3}
             />
 
-            <input
-              type="text"
-              placeholder="Sala"
-              value={filtros.sala}
-              onChange={(e) => handleFilterChange('sala', e.target.value)}
-              className="filter-input"
-            />
+            <select
+              value={salaId || ''}
+              onChange={(e) => {
+                const selectedSalaId = e.target.value ? Number(e.target.value) : null;
+                setSalaId(selectedSalaId);
+                // Atualiza o nome da sala no filtro para exibição
+                const salaSelecionada = salas.find(s => s.salaId === selectedSalaId);
+                handleFilterChange('sala', salaSelecionada?.sala || '');
+              }}
+              className="filter-select"
+              disabled={!orgaoJulgadorId || loadingSalas}
+            >
+              <option value="">
+                {loadingSalas ? 'Carregando salas...' : 
+                 !orgaoJulgadorId ? 'Selecione o órgão julgador' : 
+                 salas.length === 0 ? 'Nenhuma sala disponível' :
+                 'Sala'}
+              </option>
+              {salas.map((sala) => (
+                <option key={sala.salaId} value={sala.salaId}>
+                  {sala.sala}
+                </option>
+              ))}
+            </select>
 
             <input
               type="text"
