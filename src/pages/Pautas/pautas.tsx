@@ -389,8 +389,9 @@ const Pautas: React.FC<PautasProps> = () => {
                 <th>Data</th>
                 <th>Órgão Julgador</th>
                 <th>Turno</th>
+                <th>Sala</th>
                 <th>Análise Comparecimento</th>
-                <th>Audiências</th>
+                <th>pautista</th>
                 <th></th>
               </tr>
             </thead>
@@ -407,6 +408,7 @@ const Pautas: React.FC<PautasProps> = () => {
                     <td>{pauta.data}</td>
                     <td>{pauta.orgaoJulgador}</td>
                     <td>{pauta.turno}</td>
+                    <td>{pauta.sala}</td>
                     <td>
                       <span className={`status-badge ${
                         pauta.analiseComparecimento === 'COMPARECER' ? 'comparecer' :
@@ -415,7 +417,7 @@ const Pautas: React.FC<PautasProps> = () => {
                         {pauta.analiseComparecimento}
                       </span>
                     </td>
-                    <td>{pauta.audiencias.length}</td>
+                    <td>{pauta.pautista}</td>
                     <td>
                       {/* Ações futuras podem ser adicionadas aqui */}
                     </td>

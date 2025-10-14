@@ -17,6 +17,8 @@ export interface PautaResponseDTO {
   data: string;
   orgaoJulgador: string;
   turno: string;
+  sala: string;
+  pautista: string;
   analiseComparecimento: string;
   audiencias: AudienciaResponseDTO[];
 }

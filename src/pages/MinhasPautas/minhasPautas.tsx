@@ -21,91 +21,14 @@ export interface PautaResponseDTO {
   data: string;
   orgaoJulgador: string;
   turno: string;
+  sala: string;
   respostaAnalise: string;
   audiencias: AudienciaResponseDTO[];
 }
 
 interface MinhasPautasProps {}
 
-const mockPautas: PautaResponseDTO[] = [
-  {
-    pautaId: 1,
-    data: "15/10/2024",
-    orgaoJulgador: "1ª Vara Cível de São Paulo",
-    turno: "Matutino",
-    respostaAnalise: "COMPARECER",
-    audiencias: [
-      {
-        numeroProcesso: "1234567-89.2024.8.26.0100",
-        hora: "08:30",
-        nomeParte: "João Silva Santos",
-        advogados: ["Dr. Roberto Lima", "Dra. Maria Costa"],
-        assunto: "Ação de Cobrança",
-        classeJudicial: "Procedimento Comum",
-        prioridade: "Normal",
-        analise: "Processo com boa chance de acordo"
-      },
-      {
-        numeroProcesso: "9876543-21.2024.8.26.0100",
-        hora: "09:15",
-        nomeParte: "Empresa ABC LTDA",
-        advogados: ["Dr. Carlos Oliveira"],
-        assunto: "Rescisão Contratual",
-        classeJudicial: "Procedimento Comum",
-        prioridade: "Urgente",
-        analise: "Requer atenção especial"
-      }
-    ]
-  },
-  {
-    pautaId: 2,
-    data: "16/10/2024",
-    orgaoJulgador: "2ª Vara Cível de São Paulo",
-    turno: "Vespertino",
-    respostaAnalise: "NÃO COMPARECER",
-    audiencias: [
-      {
-        numeroProcesso: "5555666-77.2024.8.26.0200",
-        hora: "14:00",
-        nomeParte: "Maria Fernanda Souza",
-        advogados: ["Dra. Ana Paula Santos"],
-        assunto: "Indenização por Danos Morais",
-        classeJudicial: "Procedimento Comum",
-        prioridade: "Normal",
-        analise: "Documentação incompleta"
-      }
-    ]
-  },
-  {
-    pautaId: 3,
-    data: "17/10/2024",
-    orgaoJulgador: "3ª Vara Cível de São Paulo",
-    turno: "Matutino",
-    respostaAnalise: "PENDENTE",
-    audiencias: [
-      {
-        numeroProcesso: "7777888-99.2024.8.26.0300",
-        hora: "10:30",
-        nomeParte: "Pedro Henrique Lima",
-        advogados: ["Dr. José Santos", "Dra. Carla Oliveira"],
-        assunto: "Revisão Contratual",
-        classeJudicial: "Procedimento Comum",
-        prioridade: "Normal",
-        analise: ""
-      },
-      {
-        numeroProcesso: "1111222-33.2024.8.26.0300",
-        hora: "11:15",
-        nomeParte: "Construtora XYZ S.A.",
-        advogados: ["Dr. Marcos Silva"],
-        assunto: "Defeitos na Construção",
-        classeJudicial: "Procedimento Comum",
-        prioridade: "Urgente",
-        analise: "Aguardando documentos técnicos"
-      }
-    ]
-  }
-];
+
 
 const MinhasPautas: React.FC<MinhasPautasProps> = () => {
   const [pautas, setPautas] = useState<PautaResponseDTO[]>(mockPautas);
