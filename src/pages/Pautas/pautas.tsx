@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import Layout from '../../components/Layout';
 import { useNavigation } from '../../contexts/NavigationContext';
 import AdicionarAnaliseModal from './AdicionarAnaliseModal';
+import AssuntoAutocomplete from '../../components/AssuntoAutocomplete';
 import pautaService from '../../services/pautaService';
 import type { PautaResponseDTO, AudienciaResponseDTO, SalaResponse, UfResponse, OrgaoJulgadorResponse } from '../../services/pautaService';
 import './pautas.css';
@@ -24,6 +25,8 @@ const Pautas: React.FC<PautasProps> = () => {
   const [ufId, setUfId] = useState<number | null>(null);
   const [orgaosJulgadores, setOrgaosJulgadores] = useState<OrgaoJulgadorResponse[]>([]);
   const [loadingOrgaosJulgadores, setLoadingOrgaosJulgadores] = useState(false);
+  const [_assuntoId, setAssuntoId] = useState<number | null>(null);
+  const [assuntoInputValue, setAssuntoInputValue] = useState('');
   const [modalAnalise, setModalAnalise] = useState<{
     isOpen: boolean;
     audiencia: AudienciaResponseDTO | null;
@@ -57,6 +60,7 @@ const Pautas: React.FC<PautasProps> = () => {
         ufId: ufId || undefined,
         orgaoJulgadorId: orgaoJulgadorId || undefined,
         salaId: salaId || undefined,
+        assuntoId: _assuntoId || undefined,
       });
 
       setPautas(response.content);
@@ -72,7 +76,7 @@ const Pautas: React.FC<PautasProps> = () => {
   // Carrega pautas quando a página ou filtros mudam
   useEffect(() => {
     carregarPautas();
-  }, [currentPage, itemsPerPage, filtros.resultadoAnalise, ufId, orgaoJulgadorId, salaId]);
+  }, [currentPage, itemsPerPage, filtros.resultadoAnalise, ufId, orgaoJulgadorId, salaId, _assuntoId]);
 
   // Carrega UFs disponíveis na inicialização
   useEffect(() => {
@@ -364,12 +368,23 @@ const Pautas: React.FC<PautasProps> = () => {
               ))}
             </select>
 
-            <input
-              type="text"
-              placeholder="Assunto"
-              value={filtros.assunto}
-              onChange={(e) => handleFilterChange('assunto', e.target.value)}
-              className="filter-input"
+            <AssuntoAutocomplete
+              value={assuntoInputValue}
+              onChange={(newValue) => {
+                setAssuntoInputValue(newValue);
+                // Se o campo foi limpo, remove o filtro de assunto
+                if (!newValue || newValue.trim() === '') {
+                  setAssuntoId(null);
+                  handleFilterChange('assunto', '');
+                }
+              }}
+              onSelect={(assunto) => {
+                setAssuntoId(assunto.assuntoId);
+                setAssuntoInputValue(assunto.assunto);
+                handleFilterChange('assunto', assunto.assunto);
+              }}
+              placeholder="Digite o assunto"
+              minLength={3}
             />
           </div>
         </div>

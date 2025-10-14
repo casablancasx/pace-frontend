@@ -44,6 +44,11 @@ export interface UfResponse {
   sigla: string;
 }
 
+export interface AssuntoResponse {
+  assuntoId: number;
+  assunto: string;
+}
+
 export interface ListarPautasParams {
   page: number;
   size: number;
@@ -51,6 +56,7 @@ export interface ListarPautasParams {
   ufId?: number;
   orgaoJulgadorId?: number;
   salaId?: number;
+  assuntoId?: number;
 }
 
 class PautaService {
@@ -79,6 +85,9 @@ class PautaService {
       if (params.salaId) {
         queryParams.salaId = params.salaId;
       }
+      if (params.assuntoId) {
+        queryParams.assuntoId = params.assuntoId;
+      }
 
       const response = await api.get<PageResponse<PautaResponseDTO>>('/pauta', {
         params: queryParams
@@ -98,7 +107,7 @@ class PautaService {
    */
   async buscarPautaPorId(pautaId: number): Promise<PautaResponseDTO> {
     try {
-      const response = await api.get<PautaResponseDTO>(`/pautas/${pautaId}`);
+      const response = await api.get<PautaResponseDTO>(`/pauta/${pautaId}`);
       return response.data;
     } catch (error: any) {
       console.error('Erro ao buscar pauta:', error);
@@ -175,6 +184,23 @@ class PautaService {
     } catch (error: any) {
       console.error('Erro ao buscar UFs:', error);
       throw new Error('Erro ao buscar UFs.');
+    }
+  }
+
+  /**
+   * Busca assuntos por nome
+   * @param nome - Nome parcial do assunto
+   * @returns Promise com lista de assuntos
+   */
+  async listarAssuntos(nome: string): Promise<AssuntoResponse[]> {
+    try {
+      const response = await api.get<AssuntoResponse[]>('/assunto', {
+        params: { nome }
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao buscar assuntos:', error);
+      throw new Error('Erro ao buscar assuntos.');
     }
   }
 }

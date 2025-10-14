@@ -5,6 +5,7 @@ export { default as Dashboard } from './Dashboard';
 export { default as Events } from './Events';
 export { default as Orders } from './Orders';
 export { default as ImportarPlanilha } from './ImportarPlanilha';
+export { default as AssuntoAutocomplete } from './AssuntoAutocomplete';
 
 // Context exports
 export { ThemeProvider, useTheme } from '../contexts/ThemeContext';
