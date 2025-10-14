@@ -1,6 +1,6 @@
 /* Página de Pautas - Estilo Premium */
 .pautas-page {
-  padding: 32px;
+  padding: 0; /* Removido padding para aproveitar todo o espaço */
   background: var(--background-color);
   min-height: 100vh;
 }

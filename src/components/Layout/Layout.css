@@ -14,35 +14,25 @@
 
 .layout__content {
   padding: 32px 40px;
-  margin: 0 200px; /* Margem de 200px apenas nas laterais */
+  margin: 0; /* Removida margem lateral - ocupa todo o espaço disponível */
   min-height: calc(100vh - 74px); /* Ajusta pela margem + padding + border */
 }
 
-/* Responsive - Remove margens laterais em telas menores */
-@media (max-width: 1600px) {
-  .layout__content {
-    margin: 0 100px; /* Margem reduzida em telas médias */
-    padding: 32px 40px;
-  }
-}
-
+/* Responsive - Ajusta apenas padding em telas menores */
 @media (max-width: 1400px) {
   .layout__content {
-    margin: 0 50px; /* Margem ainda menor */
     padding: 24px 32px;
   }
 }
 
 @media (max-width: 1024px) {
   .layout__content {
-    margin: 0 20px; /* Margem mínima em tablets */
     padding: 24px 20px;
   }
 }
 
 @media (max-width: 768px) {
   .layout__content {
-    margin: 0; /* SEM margem lateral em mobile - ocupa todo o espaço */
     padding: 16px;
   }
 }
