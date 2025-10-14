@@ -265,16 +265,8 @@ const Pautas: React.FC<PautasProps> = () => {
 
         {/* Filtros */}
         <div className="pautas-filters">
-          <div className="search-container">
-            <Search size={20} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Buscar por órgão julgador, processo ou parte..."
-              value={filtros.searchTerm}
-              onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-              className="search-input"
-            />
-          </div>
+          
+          
 
           <div className="filters-grid">
             <select
