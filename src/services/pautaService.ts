@@ -74,6 +74,7 @@ export interface ListarPautasParams {
   salaId?: number;
   assuntoId?: number;
   prioritarias?: boolean;
+  avaliadorId?: number;
 }
 
 class PautaService {
@@ -107,6 +108,9 @@ class PautaService {
       }
       if (params.prioritarias !== undefined) {
         queryParams.prioritarias = params.prioritarias;
+      }
+      if (params.avaliadorId) {
+        queryParams.avaliadorId = params.avaliadorId;
       }
 
       const response = await api.get<PageResponse<PautaResponseDTO>>('/pauta', {
