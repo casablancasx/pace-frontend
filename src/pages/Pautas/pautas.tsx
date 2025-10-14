@@ -34,6 +34,7 @@ const Pautas: React.FC<PautasProps> = () => {
   const [loadingOrgaosJulgadores, setLoadingOrgaosJulgadores] = useState(false);
   const [_assuntoId, setAssuntoId] = useState<number | null>(null);
   const [assuntoInputValue, setAssuntoInputValue] = useState('');
+  const [prioritarias, setPrioritarias] = useState<boolean | undefined>(undefined);
   const [modalAnalise, setModalAnalise] = useState<{
     isOpen: boolean;
     audiencia: AudienciaResponseDTO | null;
@@ -68,6 +69,7 @@ const Pautas: React.FC<PautasProps> = () => {
         orgaoJulgadorId: orgaoJulgadorId || undefined,
         salaId: salaId || undefined,
         assuntoId: _assuntoId || undefined,
+        prioritarias: prioritarias,
       });
 
       setPautas(response.content);
@@ -83,7 +85,7 @@ const Pautas: React.FC<PautasProps> = () => {
   // Carrega pautas quando a página ou filtros mudam
   useEffect(() => {
     carregarPautas();
-  }, [currentPage, itemsPerPage, filtros.resultadoAnalise, ufId, orgaoJulgadorId, salaId, _assuntoId]);
+  }, [currentPage, itemsPerPage, filtros.resultadoAnalise, ufId, orgaoJulgadorId, salaId, _assuntoId, prioritarias]);
 
   // Carrega UFs disponíveis na inicialização
   useEffect(() => {
@@ -285,6 +287,24 @@ const Pautas: React.FC<PautasProps> = () => {
               <option value="COMPARECIMENTO">Comparecimento</option>
               <option value="NAO_COMPARECIMENTO">Não Comparecimento</option>
               <option value="ANALISE_PENDENTE">Análise Pendente</option>
+            </select>
+
+            <select
+              value={prioritarias === undefined ? '' : prioritarias ? 'true' : 'false'}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '') {
+                  setPrioritarias(undefined); // Mostra todas
+                } else {
+                  setPrioritarias(value === 'true');
+                }
+                setCurrentPage(0);
+              }}
+              className="filter-select"
+            >
+              <option value="">Todas as Pautas</option>
+              <option value="true">Pautas Prioritárias</option>
+              <option value="false">Pautas Não Prioritárias</option>
             </select>
 
             <select

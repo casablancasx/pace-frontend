@@ -1,6 +1,7 @@
 import api from './api';
 
 export interface AudienciaResponseDTO {
+  audienciaId: number;
   numeroProcesso: string;
   hora: string;
   nomeParte: string;
@@ -56,6 +57,12 @@ export interface PautaUpdateDTO {
   analiseComparecimento: 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE';
 }
 
+export interface AudienciaUpdateDTO {
+  audienciaId: number;
+  analiseComparecimento: 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE';
+  observacao?: string;
+}
+
 export type StatusAnaliseComparecimento = 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE';
 
 export interface ListarPautasParams {
@@ -66,6 +73,7 @@ export interface ListarPautasParams {
   orgaoJulgadorId?: number;
   salaId?: number;
   assuntoId?: number;
+  prioritarias?: boolean;
 }
 
 class PautaService {
@@ -96,6 +104,9 @@ class PautaService {
       }
       if (params.assuntoId) {
         queryParams.assuntoId = params.assuntoId;
+      }
+      if (params.prioritarias !== undefined) {
+        queryParams.prioritarias = params.prioritarias;
       }
 
       const response = await api.get<PageResponse<PautaResponseDTO>>('/pauta', {
@@ -163,6 +174,26 @@ class PautaService {
       console.error('=== SERVIÇO: Erro ===', error);
       console.error('Resposta de erro:', error.response?.data);
       throw new Error('Erro ao atualizar análise de comparecimento da pauta.');
+    }
+  }
+
+  /**
+   * Atualiza a análise de comparecimento de uma audiência
+   * @param audienciaUpdateDTO - Dados para atualização (audienciaId, analiseComparecimento, observacao)
+   * @returns Promise com a audiência atualizada
+   */
+  async atualizarAnaliseComparecimentoAudiencia(
+    audienciaUpdateDTO: AudienciaUpdateDTO
+  ): Promise<AudienciaResponseDTO> {
+    try {
+      console.log('=== SERVIÇO AUDIÊNCIA: Dados enviados ===', audienciaUpdateDTO);
+      const response = await api.patch<AudienciaResponseDTO>('/audiencia', audienciaUpdateDTO);
+      console.log('=== SERVIÇO AUDIÊNCIA: Resposta recebida ===', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('=== SERVIÇO AUDIÊNCIA: Erro ===', error);
+      console.error('Resposta de erro:', error.response?.data);
+      throw new Error('Erro ao atualizar análise de comparecimento da audiência.');
     }
   }
 

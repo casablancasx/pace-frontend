@@ -96,6 +96,40 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
     }
   };
 
+  const handleAnaliseComparecimentoAudienciaChange = async (
+    audienciaId: number,
+    novaAnalise: 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE'
+  ) => {
+    if (!pautaAtual) return;
+    
+    console.log('=== INICIANDO ATUALIZAÇÃO AUDIÊNCIA ===');
+    console.log('Audiência ID:', audienciaId);
+    console.log('Nova análise:', novaAnalise);
+
+    try {
+      const audienciaAtualizada = await pautaService.atualizarAnaliseComparecimentoAudiencia({
+        audienciaId,
+        analiseComparecimento: novaAnalise
+      });
+
+      console.log('=== AUDIÊNCIA ATUALIZADA ===', audienciaAtualizada);
+
+      // Atualiza a audiência específica na lista local
+      const pautaAtualizada: PautaResponseDTO = {
+        ...pautaAtual,
+        audiencias: pautaAtual.audiencias.map(aud => 
+          aud.audienciaId === audienciaId ? audienciaAtualizada : aud
+        )
+      };
+      
+      setPautaAtual(pautaAtualizada);
+      console.log('=== ESTADO ATUALIZADO ===');
+    } catch (error) {
+      console.error('=== ERRO NA ATUALIZAÇÃO AUDIÊNCIA ===', error);
+      alert('Erro ao atualizar análise de comparecimento da audiência. Tente novamente.');
+    }
+  };
+
   const handleSaveAnalise = (numeroProcesso: string, novaAnalise: string) => {
     if (!pautaAtual) return;
     
@@ -208,6 +242,7 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
                   <th>Classe</th>
                   <th>Prioridade</th>
                   <th>Análise</th>
+                  <th>Análise Comparecimento</th>
                   <th></th>
                 </tr>
               </thead>
@@ -239,6 +274,20 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
                       {audiencia.analise || (
                         <span className="sem-analise">Sem análise</span>
                       )}
+                    </td>
+                    <td>
+                      <select
+                        className={`resposta-select ${obterClasseAnalise(audiencia.statusComparecimento || 'ANALISE_PENDENTE')}`}
+                        value={normalizarAnaliseComparecimento(audiencia.statusComparecimento || 'ANALISE_PENDENTE')}
+                        onChange={(e) => handleAnaliseComparecimentoAudienciaChange(
+                          audiencia.audienciaId,
+                          e.target.value as 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE'
+                        )}
+                      >
+                        <option value="ANALISE_PENDENTE">Análise Pendente</option>
+                        <option value="COMPARECIMENTO">Comparecimento</option>
+                        <option value="NAO_COMPARECIMENTO">Não Comparecimento</option>
+                      </select>
                     </td>
                     <td>
                       <button
