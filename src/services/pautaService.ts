@@ -155,10 +155,13 @@ class PautaService {
     pautaUpdateDTO: PautaUpdateDTO
   ): Promise<PautaResponseDTO> {
     try {
+      console.log('=== SERVIÇO: Dados enviados ===', pautaUpdateDTO);
       const response = await api.patch<PautaResponseDTO>('/pauta/analise-comparecimento', pautaUpdateDTO);
+      console.log('=== SERVIÇO: Resposta recebida ===', response.data);
       return response.data;
     } catch (error: any) {
-      console.error('Erro ao atualizar análise de comparecimento:', error);
+      console.error('=== SERVIÇO: Erro ===', error);
+      console.error('Resposta de erro:', error.response?.data);
       throw new Error('Erro ao atualizar análise de comparecimento da pauta.');
     }
   }

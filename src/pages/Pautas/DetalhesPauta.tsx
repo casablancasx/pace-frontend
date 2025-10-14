@@ -7,6 +7,21 @@ import pautaService from '../../services/pautaService';
 import type { PautaResponseDTO, AudienciaResponseDTO } from '../../services/pautaService';
 import './detalhesPauta.css';
 
+// Helper para normalizar o valor de análise de comparecimento
+const normalizarAnaliseComparecimento = (valor: string): string => {
+  const valorUpper = valor?.toUpperCase().trim();
+  console.log('Normalizando valor:', valor, '→', valorUpper);
+  return valorUpper || 'ANALISE_PENDENTE';
+};
+
+// Helper para obter classe CSS baseada no valor
+const obterClasseAnalise = (valor: string): string => {
+  const valorNormalizado = normalizarAnaliseComparecimento(valor);
+  if (valorNormalizado === 'COMPARECIMENTO') return 'comparecer';
+  if (valorNormalizado === 'NAO_COMPARECIMENTO') return 'nao-comparecer';
+  return 'pendente';
+};
+
 interface DetalhesPautaProps {
   pautaId: string;
 }
@@ -58,22 +73,25 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
   ) => {
     if (!pautaAtual) return;
     
-    console.log('handleAnaliseComparecimentoChange chamado', { 
-      pautaId: pautaAtual.pautaId, 
-      novaAnalise 
-    });
+    console.log('=== INICIANDO ATUALIZAÇÃO ===');
+    console.log('Pauta ID:', pautaAtual.pautaId);
+    console.log('Análise atual:', pautaAtual.analiseComparecimento);
+    console.log('Nova análise:', novaAnalise);
 
     try {
-      console.log('Enviando requisição para atualizar análise...');
       const pautaAtualizada = await pautaService.atualizarAnaliseComparecimento({
         pautaId: pautaAtual.pautaId,
         analiseComparecimento: novaAnalise
       });
 
-      console.log('Pauta atualizada com sucesso:', pautaAtualizada);
+      console.log('=== RESPOSTA DO BACKEND ===');
+      console.log('Pauta atualizada completa:', pautaAtualizada);
+      console.log('Análise após atualização:', pautaAtualizada.analiseComparecimento);
+      
       setPautaAtual(pautaAtualizada);
+      console.log('=== ESTADO ATUALIZADO ===');
     } catch (error) {
-      console.error('Erro ao atualizar análise de comparecimento:', error);
+      console.error('=== ERRO NA ATUALIZAÇÃO ===', error);
       alert('Erro ao atualizar análise de comparecimento. Tente novamente.');
     }
   };
@@ -158,20 +176,18 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
             <div className="info-item">
               <span className="info-label">Análise Comparecimento</span>
               <select 
-                className={`resposta-select ${
-                  pautaAtual.analiseComparecimento === 'COMPARECIMENTO' ? 'comparecer' :
-                  pautaAtual.analiseComparecimento === 'NAO_COMPARECIMENTO' ? 'nao-comparecer' : 'pendente'
-                }`}
-                value={pautaAtual.analiseComparecimento}
+                className={`resposta-select ${obterClasseAnalise(pautaAtual.analiseComparecimento)}`}
+                value={normalizarAnaliseComparecimento(pautaAtual.analiseComparecimento)}
                 onChange={(e) => {
+                  console.log('Select onChange:', e.target.value);
                   handleAnaliseComparecimentoChange(
                     e.target.value as 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE'
                   );
                 }}
               >
-                <option value="ANALISE_PENDENTE">ANÁLISE PENDENTE</option>
-                <option value="COMPARECIMENTO">COMPARECIMENTO</option>
-                <option value="NAO_COMPARECIMENTO">NÃO COMPARECIMENTO</option>
+                <option value="ANALISE_PENDENTE">Análise Pendente</option>
+                <option value="COMPARECIMENTO">Comparecimento</option>
+                <option value="NAO_COMPARECIMENTO">Não Comparecimento</option>
               </select>
             </div>
           </div>

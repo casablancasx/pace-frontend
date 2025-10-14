@@ -7,6 +7,14 @@ import pautaService from '../../services/pautaService';
 import type { PautaResponseDTO, AudienciaResponseDTO, SalaResponse, UfResponse, OrgaoJulgadorResponse } from '../../services/pautaService';
 import './pautas.css';
 
+// Helper para obter classe CSS baseada no valor de análise
+const obterClasseAnalise = (valor: string): string => {
+  const valorUpper = valor?.toUpperCase().trim();
+  if (valorUpper === 'COMPARECIMENTO') return 'comparecer';
+  if (valorUpper === 'NAO_COMPARECIMENTO') return 'nao-comparecer';
+  return 'pendente';
+};
+
 interface PautasProps {}
 
 const Pautas: React.FC<PautasProps> = () => {
@@ -409,10 +417,7 @@ const Pautas: React.FC<PautasProps> = () => {
                     <td>{pauta.turno}</td>
                     <td>{pauta.sala}</td>
                     <td>
-                      <span className={`status-badge ${
-                        pauta.analiseComparecimento === 'COMPARECIMENTO' ? 'comparecer' :
-                        pauta.analiseComparecimento === 'NAO_COMPARECIMENTO' ? 'nao-comparecer' : 'pendente'
-                      }`}>
+                      <span className={`status-badge ${obterClasseAnalise(pauta.analiseComparecimento)}`}>
                         {pauta.analiseComparecimento}
                       </span>
                     </td>
