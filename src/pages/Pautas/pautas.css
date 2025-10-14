@@ -132,6 +132,10 @@
   background: transparent;
 }
 
+.pautas-table td.clickable {
+  cursor: pointer;
+}
+
 .table-action-button {
   display: flex;
   align-items: center;
@@ -286,6 +290,47 @@
   background: rgba(245, 158, 11, 0.1);
   color: #f59e0b;
   border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+/* Select de status de comparecimento */
+.status-select {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.status-select:hover {
+  border-color: var(--primary-color);
+}
+
+.status-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.status-select.comparecer {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.status-select.nao-comparecer {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.status-select.pendente {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 /* Select de resposta análise */

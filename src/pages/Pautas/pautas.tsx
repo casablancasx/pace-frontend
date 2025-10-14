@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search } from 'lucide-react';
 import Layout from '../../components/Layout';
 import { useNavigation } from '../../contexts/NavigationContext';
 import AdicionarAnaliseModal from './AdicionarAnaliseModal';
@@ -275,9 +274,9 @@ const Pautas: React.FC<PautasProps> = () => {
               className="filter-select"
             >
               <option value="">Resultado da Análise</option>
-              <option value="COMPARECER">Comparecer</option>
-              <option value="NÃO COMPARECER">Não Comparecer</option>
-              <option value="PENDENTE">Pendente</option>
+              <option value="COMPARECIMENTO">Comparecimento</option>
+              <option value="NAO_COMPARECIMENTO">Não Comparecimento</option>
+              <option value="ANALISE_PENDENTE">Análise Pendente</option>
             </select>
 
             <select
@@ -411,8 +410,8 @@ const Pautas: React.FC<PautasProps> = () => {
                     <td>{pauta.sala}</td>
                     <td>
                       <span className={`status-badge ${
-                        pauta.analiseComparecimento === 'COMPARECER' ? 'comparecer' :
-                        pauta.analiseComparecimento === 'NÃO COMPARECER' ? 'nao-comparecer' : 'pendente'
+                        pauta.analiseComparecimento === 'COMPARECIMENTO' ? 'comparecer' :
+                        pauta.analiseComparecimento === 'NAO_COMPARECIMENTO' ? 'nao-comparecer' : 'pendente'
                       }`}>
                         {pauta.analiseComparecimento}
                       </span>

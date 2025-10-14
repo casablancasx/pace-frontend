@@ -53,6 +53,31 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
     });
   };
 
+  const handleAnaliseComparecimentoChange = async (
+    novaAnalise: 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE'
+  ) => {
+    if (!pautaAtual) return;
+    
+    console.log('handleAnaliseComparecimentoChange chamado', { 
+      pautaId: pautaAtual.pautaId, 
+      novaAnalise 
+    });
+
+    try {
+      console.log('Enviando requisição para atualizar análise...');
+      const pautaAtualizada = await pautaService.atualizarAnaliseComparecimento({
+        pautaId: pautaAtual.pautaId,
+        analiseComparecimento: novaAnalise
+      });
+
+      console.log('Pauta atualizada com sucesso:', pautaAtualizada);
+      setPautaAtual(pautaAtualizada);
+    } catch (error) {
+      console.error('Erro ao atualizar análise de comparecimento:', error);
+      alert('Erro ao atualizar análise de comparecimento. Tente novamente.');
+    }
+  };
+
   const handleSaveAnalise = (numeroProcesso: string, novaAnalise: string) => {
     if (!pautaAtual) return;
     
@@ -134,19 +159,19 @@ const DetalhesPauta: React.FC<DetalhesPautaProps> = ({ pautaId }) => {
               <span className="info-label">Análise Comparecimento</span>
               <select 
                 className={`resposta-select ${
-                  pautaAtual.analiseComparecimento === 'COMPARECER' ? 'comparecer' :
-                  pautaAtual.analiseComparecimento === 'NÃO COMPARECER' ? 'nao-comparecer' : 'pendente'
+                  pautaAtual.analiseComparecimento === 'COMPARECIMENTO' ? 'comparecer' :
+                  pautaAtual.analiseComparecimento === 'NAO_COMPARECIMENTO' ? 'nao-comparecer' : 'pendente'
                 }`}
                 value={pautaAtual.analiseComparecimento}
                 onChange={(e) => {
-                  const novaResposta = e.target.value;
-                  if (!pautaAtual) return;
-                  setPautaAtual({ ...pautaAtual, analiseComparecimento: novaResposta });
+                  handleAnaliseComparecimentoChange(
+                    e.target.value as 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE'
+                  );
                 }}
               >
-                <option value="PENDENTE">PENDENTE</option>
-                <option value="COMPARECER">COMPARECER</option>
-                <option value="NÃO COMPARECER">NÃO COMPARECER</option>
+                <option value="ANALISE_PENDENTE">ANÁLISE PENDENTE</option>
+                <option value="COMPARECIMENTO">COMPARECIMENTO</option>
+                <option value="NAO_COMPARECIMENTO">NÃO COMPARECIMENTO</option>
               </select>
             </div>
           </div>

@@ -200,9 +200,9 @@ const MinhasPautas: React.FC<MinhasPautasProps> = () => {
               className="filter-select"
             >
               <option value="">Resultado da Análise</option>
-              <option value="COMPARECER">Comparecer</option>
-              <option value="NÃO COMPARECER">Não Comparecer</option>
-              <option value="PENDENTE">Pendente</option>
+              <option value="COMPARECIMENTO">Comparecimento</option>
+              <option value="NAO_COMPARECIMENTO">Não Comparecimento</option>
+              <option value="ANALISE_PENDENTE">Análise Pendente</option>
             </select>
 
             <select

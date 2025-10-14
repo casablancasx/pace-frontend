@@ -51,6 +51,13 @@ export interface AssuntoResponse {
   assunto: string;
 }
 
+export interface PautaUpdateDTO {
+  pautaId: number;
+  analiseComparecimento: 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE';
+}
+
+export type StatusAnaliseComparecimento = 'COMPARECIMENTO' | 'NAO_COMPARECIMENTO' | 'ANALISE_PENDENTE';
+
 export interface ListarPautasParams {
   page: number;
   size: number;
@@ -136,6 +143,23 @@ class PautaService {
     } catch (error: any) {
       console.error('Erro ao atualizar análise:', error);
       throw new Error('Erro ao atualizar análise da audiência.');
+    }
+  }
+
+  /**
+   * Atualiza a análise de comparecimento de uma pauta
+   * @param pautaUpdateDTO - Dados para atualização (pautaId e analiseComparecimento)
+   * @returns Promise com a pauta atualizada
+   */
+  async atualizarAnaliseComparecimento(
+    pautaUpdateDTO: PautaUpdateDTO
+  ): Promise<PautaResponseDTO> {
+    try {
+      const response = await api.patch<PautaResponseDTO>('/pauta/analise-comparecimento', pautaUpdateDTO);
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao atualizar análise de comparecimento:', error);
+      throw new Error('Erro ao atualizar análise de comparecimento da pauta.');
     }
   }
 
