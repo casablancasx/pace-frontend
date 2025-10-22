@@ -33,6 +33,11 @@ export interface LoginResponseDTO {
   token: string;
 }
 
+// Interface para resposta de refresh token
+export interface RefreshTokenResponseDTO {
+  token: string;
+}
+
 // Interface para erros de API
 export interface ApiError {
   message: string;

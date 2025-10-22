@@ -1,5 +1,5 @@
 import api from './api';
-import type { LoginRequestDTO, LoginResponseDTO } from '../types/auth';
+import type { LoginRequestDTO, LoginResponseDTO, RefreshTokenResponseDTO } from '../types/auth';
 
 export const AUTH_CHANGE_EVENT = 'authChange';
 
@@ -7,6 +7,12 @@ export const AUTH_CHANGE_EVENT = 'authChange';
 class AuthService {
   // Endpoint para login
   private static readonly LOGIN_URL = '/auth/login';
+  // Endpoint para refresh token
+  private static readonly REFRESH_TOKEN_URL = '/auth/refresh_token';
+  // Intervalo de refresh: 30 minutos em milissegundos
+  private static readonly REFRESH_INTERVAL = 30 * 60 * 1000;
+  // ID do intervalo de refresh
+  private static refreshIntervalId: number | null = null;
   
   /**
    * Realiza a autenticação do usuário
@@ -21,7 +27,10 @@ class AuthService {
       sessionStorage.setItem('auth_token', response.data.token);
       sessionStorage.setItem('user_data', JSON.stringify(response.data.user));
 
-  window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+      window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+      
+      // Inicia o refresh automático do token
+      this.startTokenRefresh();
       
       return response.data;
     } catch (error) {
@@ -34,6 +43,9 @@ class AuthService {
    * Finaliza a sessão do usuário
    */
   static logout(): void {
+    // Para o refresh automático do token
+    this.stopTokenRefresh();
+    
     sessionStorage.removeItem('auth_token');
     sessionStorage.removeItem('user_data');
     window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
@@ -71,6 +83,61 @@ class AuthService {
    */
   static getToken(): string | null {
     return sessionStorage.getItem('auth_token');
+  }
+
+  /**
+   * Renova o token de autenticação
+   * @returns Novo token JWT
+   */
+  static async refreshToken(): Promise<string> {
+    try {
+      const currentToken = this.getToken();
+      if (!currentToken) {
+        throw new Error('Nenhum token disponível para renovar');
+      }
+
+      const response = await api.get<RefreshTokenResponseDTO>(this.REFRESH_TOKEN_URL);
+      
+      // Atualiza o token no sessionStorage
+      sessionStorage.setItem('auth_token', response.data.token);
+      
+      return response.data.token;
+    } catch (error) {
+      console.error('Erro ao renovar token:', error);
+      // Se falhar o refresh, faz logout
+      this.logout();
+      throw error;
+    }
+  }
+
+  /**
+   * Inicia o refresh automático do token a cada 30 minutos
+   */
+  static startTokenRefresh(): void {
+    // Para qualquer refresh anterior
+    this.stopTokenRefresh();
+
+    // Inicia novo intervalo
+    this.refreshIntervalId = window.setInterval(async () => {
+      if (this.isAuthenticated()) {
+        try {
+          await this.refreshToken();
+          console.log('Token renovado automaticamente');
+        } catch (error) {
+          console.error('Falha ao renovar token automaticamente:', error);
+        }
+      }
+    }, this.REFRESH_INTERVAL);
+  }
+
+  /**
+   * Para o refresh automático do token
+   */
+  static stopTokenRefresh(): void {
+    if (this.refreshIntervalId !== null) {
+      clearInterval(this.refreshIntervalId);
+      this.refreshIntervalId = null;
+    }
   }
 }
 

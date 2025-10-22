@@ -91,6 +91,17 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({ ch
       window.removeEventListener('storage', handleAuthChange);
     };
   }, [refreshUser]);
+
+  // Inicia o refresh automático do token se o usuário estiver autenticado
+  useEffect(() => {
+    if (AuthService.isAuthenticated()) {
+      AuthService.startTokenRefresh();
+    }
+
+    return () => {
+      AuthService.stopTokenRefresh();
+    };
+  }, []);
   
   // Função para verificar se o usuário tem uma permissão específica
   const hasPermission = (permission: string) => {
