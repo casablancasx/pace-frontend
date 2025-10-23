@@ -10,7 +10,8 @@ class AuthService {
   // Endpoint para refresh token
   private static readonly REFRESH_TOKEN_URL = '/auth/refresh_token';
   // Intervalo de refresh: 30 minutos em milissegundos
-  private static readonly REFRESH_INTERVAL = 30 * 60 * 1000;
+  // Para testes, você pode mudar para 1 minuto: 1 * 60 * 1000
+  private static readonly REFRESH_INTERVAL = 28 * 60 * 1000;
   // ID do intervalo de refresh
   private static refreshIntervalId: number | null = null;
   
@@ -98,6 +99,7 @@ class AuthService {
 
       const response = await api.get<RefreshTokenResponseDTO>(this.REFRESH_TOKEN_URL);
       
+      console.log('Token renovado com sucesso');
       // Atualiza o token no sessionStorage
       sessionStorage.setItem('auth_token', response.data.token);
       
