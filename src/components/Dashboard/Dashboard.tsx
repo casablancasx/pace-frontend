@@ -4,6 +4,7 @@ import Layout from '../Layout';
 import MapaBrasil from '../MapaBrasil';
 import AudienceSubjectBarChart from './AudienceSubjectBarChart';
 import AudienceYearChart from './AudienceYearChart';
+import TipoContestacaoChart from './TipoContestacaoChart';
 import type { AudienceSubjectMetric } from './AudienceSubjectBarChart';
 import type { AudienceYearMetric } from './AudienceYearChart';
 import type { DashboardData, DashboardStateMetric, MetricCard } from '../../types';
@@ -282,6 +283,10 @@ const Dashboard: React.FC<DashboardProps> = ({ data = mockData }) => {
 
       <section className="dashboard__year-chart">
         <AudienceYearChart data={audienceYearData} />
+      </section>
+
+      <section className="dashboard__tipo-contestacao">
+        <TipoContestacaoChart />
       </section>
     </Layout>
   );
