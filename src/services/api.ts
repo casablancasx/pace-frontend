@@ -32,11 +32,10 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Tratamento de erros 401 (não autorizado) - logout automático
+    // Tratamento de erros 401 (não autorizado) - apenas loga o erro
     if (error.response && error.response.status === 401) {
-      sessionStorage.removeItem('auth_token');
-      sessionStorage.removeItem('user_data');
-      window.location.href = '/login';
+      console.warn('Erro 401: Não autorizado');
+      // NÃO faz logout automático
     }
     return Promise.reject(error);
   }

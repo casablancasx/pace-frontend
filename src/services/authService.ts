@@ -11,7 +11,7 @@ class AuthService {
   private static readonly REFRESH_TOKEN_URL = '/auth/refresh_token';
   // Intervalo de refresh: 30 minutos em milissegundos
   // Para testes, você pode mudar para 1 minuto: 1 * 60 * 1000
-  private static readonly REFRESH_INTERVAL = 28 * 60 * 1000;
+  private static readonly REFRESH_INTERVAL = 25 * 60 * 1000;
   // ID do intervalo de refresh
   private static refreshIntervalId: number | null = null;
   
@@ -106,8 +106,7 @@ class AuthService {
       return response.data.token;
     } catch (error) {
       console.error('Erro ao renovar token:', error);
-      // Se falhar o refresh, faz logout
-      this.logout();
+      // NÃO faz logout automático - apenas loga o erro
       throw error;
     }
   }
