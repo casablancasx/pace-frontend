@@ -27,7 +27,7 @@ const Advogados: React.FC<AdvogadosProps> = ({ onCadastrarAdvogado, onViewAdvoga
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0); // API é baseada em 0
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(10);
   const [apenasAdvogadosPrioritarios, setApenasAdvogadosPrioritarios] = useState(false);
 
   // Efeito para carregar advogados quando a página é montada ou filtros mudam

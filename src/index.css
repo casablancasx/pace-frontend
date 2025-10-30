@@ -7,53 +7,8 @@
   box-sizing: border-box;
 }
 
-/* Light Theme */
-:root,
-[data-theme="light"] {
-  /* Colors */
-  --primary-color: #3b82f6;
-  --primary-hover: #2563eb;
-  --success-color: #10b981;
-  --error-color: #ef4444;
-  --warning-color: #f59e0b;
-  
-  /* Text Colors */
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  
-  /* Backgrounds */
-  --background: #ffffff;
-  --sidebar-background: #ffffff;
-  --dashboard-background: #f9fafb;
-  --card-background: #ffffff;
-  --table-header-background: #f9fafb;
-  --table-row-hover: #f9fafb;
-  --sidebar-hover: #f3f4f6;
-  --background-secondary: #ffffff;
-  --hover-color: #f3f4f6;
-  
-  /* Borders */
-  --border-color: #e5e7eb;
-  --border-light: #f3f4f6;
-  --border-hover: #d1d5db;
-  
-  /* RGB Values for transparency */
-  --border-color-rgb: 229, 231, 235;
-  --hover-color-rgb: 243, 244, 246;
-  
-  /* Button Colors */
-  --button-background: #3b82f6;
-  
-  /* Input Colors */
-  --input-background: #f1f5f9;
-  
-  /* Shadows */
-  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-}
-
-/* Dark Theme */
-[data-theme="dark"] {
+/* Dark Theme - Default and Only Theme */
+:root {
   /* Colors */
   --primary-color: #3b82f6;
   --primary-hover: #2563eb;

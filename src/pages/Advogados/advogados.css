@@ -422,30 +422,30 @@
 }
 
 /* Dark Theme Adjustments */
-[data-theme="dark"] .advogados-table tbody tr:hover {
+.advogados-table tbody tr:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme="dark"] .local-tag {
+.local-tag {
   background: rgba(59, 130, 246, 0.15);
   border-color: rgba(59, 130, 246, 0.3);
 }
 
-[data-theme="dark"] .status-badge.prioritario {
+.status-badge.prioritario {
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-[data-theme="dark"] .status-badge.normal {
+.status-badge.normal {
   background: rgba(34, 197, 94, 0.15);
   border-color: rgba(34, 197, 94, 0.3);
 }
 
-[data-theme="dark"] .delete-button {
+.delete-button {
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-[data-theme="dark"] .delete-button:hover {
+.delete-button:hover {
   background: rgba(239, 68, 68, 0.25);
 }

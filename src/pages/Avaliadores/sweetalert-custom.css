@@ -64,25 +64,25 @@
 }
 
 /* Dark theme support */
-[data-theme="dark"] .swal2-popup {
+.swal2-popup {
   background-color: var(--card-background, #1f2937);
   color: var(--text-primary, #f9fafb);
 }
 
-[data-theme="dark"] .swal2-title {
+.swal2-title {
   color: var(--text-primary, #f9fafb);
 }
 
-[data-theme="dark"] .swal2-html-container {
+.swal2-html-container {
   color: var(--text-secondary, #d1d5db);
 }
 
-[data-theme="dark"] .swal2-cancel {
+.swal2-cancel {
   background-color: var(--background-secondary, #374151) !important;
   color: var(--text-primary, #f9fafb) !important;
   border-color: var(--border-color, #4b5563) !important;
 }
 
-[data-theme="dark"] .swal2-cancel:hover {
+.swal2-cancel:hover {
   background-color: var(--hover-color, #4b5563) !important;
 }

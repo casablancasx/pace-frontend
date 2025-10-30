@@ -353,22 +353,22 @@
 }
 
 /* Dark theme adjustments */
-[data-theme="dark"] .status-badge.comparecer {
+.status-badge.comparecer {
   background: rgba(34, 197, 94, 0.15);
   border-color: rgba(34, 197, 94, 0.3);
 }
 
-[data-theme="dark"] .status-badge.nao-comparecer {
+.status-badge.nao-comparecer {
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-[data-theme="dark"] .prioridade-badge.normal {
+.prioridade-badge.normal {
   background: rgba(107, 114, 128, 0.15);
   border-color: rgba(107, 114, 128, 0.3);
 }
 
-[data-theme="dark"] .prioridade-badge.urgente {
+.prioridade-badge.urgente {
   background: rgba(245, 101, 101, 0.15);
   border-color: rgba(245, 101, 101, 0.3);
 }

@@ -172,13 +172,8 @@
   padding-top: 16px;
 }
 
-.sidebar__theme-toggle {
-  margin-bottom: 16px;
-}
-
 /* User Section */
 .sidebar__user-section {
-  margin-top: 16px;
   position: relative;
 }
 

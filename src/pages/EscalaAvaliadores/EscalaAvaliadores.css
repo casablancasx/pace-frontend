@@ -192,7 +192,7 @@
 }
 
 /* Dark theme specific adjustments */
-[data-theme="dark"] .form-select option {
+.form-select option {
   background: var(--card-background);
   color: var(--text-primary);
 }

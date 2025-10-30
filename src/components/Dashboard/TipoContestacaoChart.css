@@ -7,7 +7,7 @@
   margin-top: 24px;
 }
 
-[data-theme="dark"] .tipo-contestacao-chart {
+.tipo-contestacao-chart {
   background: var(--card-background);
   border-color: var(--border-color);
 }
@@ -21,7 +21,7 @@
   border-bottom: 1px solid var(--border-color, #e5e7eb);
 }
 
-[data-theme="dark"] .chart-header {
+.chart-header {
   border-bottom-color: var(--border-color);
 }
 
@@ -32,7 +32,7 @@
   margin: 0 0 8px 0;
 }
 
-[data-theme="dark"] .chart-header h3 {
+.chart-header h3 {
   color: var(--text-primary);
 }
 
@@ -45,7 +45,7 @@
   border-radius: 8px;
 }
 
-[data-theme="dark"] .total-badge {
+.total-badge {
   background: rgba(59, 130, 246, 0.2);
 }
 
@@ -79,6 +79,6 @@
   font-size: 14px;
 }
 
-[data-theme="dark"] .empty-state {
+.empty-state {
   color: var(--text-secondary);
 }

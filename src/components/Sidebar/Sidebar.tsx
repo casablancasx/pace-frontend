@@ -9,14 +9,11 @@ import {
   Upload,
   ChevronDown,
   ChevronUp,
-  User, 
-  Sun, 
-  Moon,
+  User,
   LogOut,
   Folder
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../../contexts/ThemeContext';
 import { useNavigation } from '../../contexts/NavigationContext';
 import { useAuthorization } from '../../contexts/AuthorizationContext';
 import AuthService from '../../services/authService';
@@ -42,7 +39,6 @@ const allEscalarItems: SidebarItem[] = [
 ];
 
 const Sidebar: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
   const { currentPage, setCurrentPage } = useNavigation();
   const navigate = useNavigate();
   const { allowedRoutes, userData, isLoading } = useAuthorization();
@@ -188,14 +184,6 @@ const Sidebar: React.FC = () => {
       </nav>
 
       <div className="sidebar__footer">
-        <button 
-          className="sidebar__button sidebar__theme-toggle"
-          onClick={toggleTheme}
-        >
-          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-          <span>{theme === 'light' ? 'Dark' : 'Light'} Mode</span>
-        </button>
-
         <div className="sidebar__user-section" ref={userMenuRef}>
           <button 
             className={`sidebar__user ${isUserMenuOpen ? 'sidebar__user--open' : ''}`}

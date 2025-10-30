@@ -7,7 +7,7 @@
   margin-top: 24px;
 }
 
-[data-theme="dark"] .audience-year-chart {
+.audience-year-chart {
   background: var(--card-background);
   border-color: var(--border-color);
 }
@@ -25,11 +25,11 @@
   margin: 0;
 }
 
-[data-theme="dark"] .audience-year-chart__header {
+.audience-year-chart__header {
   border-bottom-color: var(--border-color);
 }
 
-[data-theme="dark"] .audience-year-chart__title {
+.audience-year-chart__title {
   color: var(--text-primary);
 }
 
